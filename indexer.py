@@ -10,6 +10,7 @@ def createIndex(tokens: [str], html: int):
 
     # create a frequency dictionary for all the tokens
     freqDict = nltk.FreqDist(tokens)
+    # print(tokens)
 
     # go through all tokens and add to the global indexer
     for token in freqDict:
@@ -21,15 +22,15 @@ def createIndex(tokens: [str], html: int):
             frequency = postings[0][html][0]
             updatedFrequency = frequency + freqDict[token]
             postings[0][html][0] = updatedFrequency # this will have an updated list
+        print(token)
         globalIndex[token] = postings
 
     # if index is a multiple of 100, we dump into jsonFile and clear the global index
-    if html % 100 == 0:
+    if html % 100 == 0 or html < 100:
         with open('index.json', 'r+') as jsonFile:
             jsonFile.seek(0)
-            # add to jsonFile and
-            json.dump(globalIndex, jsonFile)
-            jsonFile.truncate()
+            json.dump(globalIndex, jsonFile, indent=4)
+
         globalIndex.clear()
 
 

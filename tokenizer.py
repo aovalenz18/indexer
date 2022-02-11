@@ -29,5 +29,5 @@ def parseTokens(tokens):
     ps = PorterStemmer()
     for index, word in enumerate(tokens):
         tokens[index] = ps.stem(word)
-
+    return tokens
 
