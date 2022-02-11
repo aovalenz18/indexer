@@ -1,7 +1,6 @@
 from importlib.resources import path
 from tokenizer import *
 from indexer import *
-from pathlib import Path
 import json
 import os
 
