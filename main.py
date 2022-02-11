@@ -74,15 +74,16 @@ if __name__=="__main__":
     docIDInd = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
-    for root, dirs, files in os.walk('DEV'):
-        print(str(files[0]))
-        for filename in files:
-            tokens = openHtml(filename)
+    for files in os.scandir('DEV'):
+        print(files.path)
+        if not files.path.startswith('.'):
+            print(files.path)
+            tokens = openHtml(files.path)
             parsedTokens = parseTokens(tokens)
             'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
             createIndex(parsedTokens, docIDInd)
             docIDInd+=1
-            addPathToDocInd(os.path.join(dirs, filename), docIDInd)
+            addPathToDocInd(files.path, docIDInd)
         
 
 
