@@ -4,6 +4,8 @@ from indexer import *
 import json
 import os
 
+globalIndex = {}
+
 def createReport():
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
     and the size of our JSON file and
