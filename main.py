@@ -12,8 +12,8 @@ def createReport():
     and the size of our JSON file and
     put it in a txt file or pdf if you know how '''
 
-    file = open('index.json')
-    data = json.load(file)
+    file = open('index.json', 'r+')
+    data = json.loads(file)
     
     numTokens = len(data)
     fileSize = os.path.getsize('index.json')
@@ -22,7 +22,7 @@ def createReport():
         numDocs += len(listPairs[0])
     file.close()
 
-    with open("report.txt", "r") as file:
+    with open("report.txt", "r+") as file:
         file.write("Assignment 3 Milestone 1 Report \n")
         file.write(f"Number of unique tokens: {numTokens}")
         file.write(f"Number of documents {numDocs}")
