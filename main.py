@@ -85,7 +85,7 @@ if __name__=="__main__":
                     'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     createIndex(parsedTokens, docIDInd)
                     docIDInd+=1
-                    addPathToDocInd(child2, docIDInd)
+                    addPathToDocInd(child2.name, docIDInd)
         
 
 
