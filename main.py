@@ -1,3 +1,4 @@
+from importlib.resources import path
 from tokenizer import *
 from indexer import *
 from pathlib import Path
@@ -28,21 +29,15 @@ def createReport():
 
 if __name__=="__main__":
 
-    indLineNum = 0
+    docIDInd = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
-    paths = Path("DEV").parent / "DEV"
-    data = open(paths)
-    for path in data:
-        file = path
-        print(str(path))
-        tokens = openHtml(file)
+    for subdir, dirs, files in os.walk('DEV'):
+        print(str(files))
+        tokens = openHtml(files)
         parsedTokens = parseTokens(tokens)
-
         'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
-        createIndex(parsedTokens, file, indLineNum)
-
-    data.close()
-
+        createIndex(parsedTokens, docIDInd)
+        docIDInd+=1
 
 
