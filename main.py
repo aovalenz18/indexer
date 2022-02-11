@@ -78,9 +78,11 @@ if __name__=="__main__":
         if not child.name.startswith('.'):
             for child2 in Path(child).iterdir():
                 if not child2.name.startswith('.'):
-                    print(child2.name)
+
                     tokens = openHtml(child2)
+                    # print("regular", tokens)
                     parsedTokens = parseTokens(tokens)
+                    # print("parsed",parsedTokens)
                     'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     createIndex(parsedTokens, docIDInd)
                     docIDInd+=1
