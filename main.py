@@ -74,8 +74,11 @@ if __name__=="__main__":
     docIDInd = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
+    #Open the initial DEV directory
     for child in Path('DEVtesting').iterdir():
+        #discard hidden files
         if not child.name.startswith('.'):
+            #Open the subdirectories
             for child2 in Path(child).iterdir():
                 if not child2.name.startswith('.'):
 
