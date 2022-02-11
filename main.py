@@ -16,7 +16,7 @@ def createReport():
     fileSize = os.path.getsize('index.json')
     numDocs = 0
     for listPairs in data:
-        numDocs += len(listPairs)
+        numDocs += len(listPairs[0])
     file.close()
 
     with open("report.txt", "r") as file:
@@ -28,18 +28,21 @@ def createReport():
 
 if __name__=="__main__":
 
-
+    indLineNum = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
-    paths = Path("DEV").rglob('*.asm')
-    for path in paths:
+    paths = Path("DEV").parent / "DEV"
+    data = open(paths)
+    for path in data:
         file = path
+        print(str(path))
         tokens = openHtml(file)
         parsedTokens = parseTokens(tokens)
 
         'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
-        createIndex(parsedTokens, file)
+        createIndex(parsedTokens, file, indLineNum)
 
+    data.close()
 
 
 
