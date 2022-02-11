@@ -88,6 +88,7 @@ if __name__=="__main__":
                     createIndex(parsedTokens, docIDInd)
                     docIDInd+=1
                     addPathToDocInd(child2.name, docIDInd)
+    createReport()
         
 
 
