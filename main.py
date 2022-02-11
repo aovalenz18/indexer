@@ -13,7 +13,7 @@ def createReport():
     put it in a txt file or pdf if you know how '''
 
     file = open('index.json', 'r+')
-    data = json.loads(file)
+    data = json.load(file)
     
     numTokens = len(data)
     fileSize = os.path.getsize('index.json')
