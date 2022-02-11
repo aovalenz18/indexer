@@ -1,4 +1,3 @@
-from importlib.resources import path
 from tokenizer import *
 from indexer import *
 import json
