@@ -78,7 +78,6 @@ if __name__=="__main__":
     for child in Path('DEV').iterdir():
         if not child.name.startswith('.'):
             for child2 in Path(child).iterdir():
-                print(child2.name)
                 if not child2.name.startswith('.'):
                     print(child2.name)
                     tokens = openHtml(child2)
