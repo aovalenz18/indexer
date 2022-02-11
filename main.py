@@ -81,9 +81,9 @@ if __name__=="__main__":
                     tokens = openHtml(child2)
                     parsedTokens = parseTokens(tokens)
                     #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
+                    docIDInd+=1
                     createIndex(parsedTokens, docIDInd)
                     addPathToDocInd(child2.name, docIDInd)
-                    docIDInd+=1
 
     createReport(docIDInd)
         
