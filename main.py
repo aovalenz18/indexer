@@ -78,15 +78,12 @@ if __name__=="__main__":
             #Open the subdirectories
             for child2 in Path(child).iterdir():
                 if not child2.name.startswith('.'):
-
                     tokens = openHtml(child2)
-                    # print("regular", tokens)
                     parsedTokens = parseTokens(tokens)
-                    # print("parsed",parsedTokens)
-                    'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
+                    #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     createIndex(parsedTokens, docIDInd)
-                    docIDInd+=1
                     addPathToDocInd(child2.name, docIDInd)
+                    docIDInd+=1
 
     createReport(docIDInd)
         
