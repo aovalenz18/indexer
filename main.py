@@ -3,6 +3,7 @@ from tokenizer import *
 from indexer import *
 import json
 import os
+from pathlib import Path
 
 # Shaun
 globalIndex = {}
@@ -74,16 +75,18 @@ if __name__=="__main__":
     docIDInd = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
-    for files in os.scandir('DEV'):
-        print(files.path)
-        if not files.path.startswith('.'):
-            print(files.path)
-            tokens = openHtml(files.path)
-            parsedTokens = parseTokens(tokens)
-            'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
-            createIndex(parsedTokens, docIDInd)
-            docIDInd+=1
-            addPathToDocInd(files.path, docIDInd)
+    for child in Path('DEV').iterdir():
+        if not child.name.startswith('.'):
+            for child2 in Path(child).iterdir():
+                print(child2.name)
+                if not child2.name.startswith('.'):
+                    print(child2.name)
+                    tokens = openHtml(child2)
+                    parsedTokens = parseTokens(tokens)
+                    'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
+                    createIndex(parsedTokens, docIDInd)
+                    docIDInd+=1
+                    addPathToDocInd(child2, docIDInd)
         
 
 
