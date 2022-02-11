@@ -1,6 +1,6 @@
+from importlib.resources import path
 from tokenizer import *
 from indexer import *
-from pathlib import Path
 import json
 import os
 
@@ -16,7 +16,7 @@ def createReport():
     fileSize = os.path.getsize('index.json')
     numDocs = 0
     for listPairs in data:
-        numDocs += len(listPairs)
+        numDocs += len(listPairs[0])
     file.close()
 
     with open("report.txt", "r") as file:
@@ -28,18 +28,15 @@ def createReport():
 
 if __name__=="__main__":
 
-
+    docIDInd = 0
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
-    paths = Path("DEV").rglob('*.asm')
-    for path in paths:
-        file = path
-        tokens = openHtml(file)
+    for subdir, dirs, files in os.walk('DEV'):
+        print(str(files))
+        tokens = openHtml(files)
         parsedTokens = parseTokens(tokens)
-
         'add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
-        createIndex(parsedTokens, file)
-
-
+        createIndex(parsedTokens, docIDInd)
+        docIDInd+=1
 
 
