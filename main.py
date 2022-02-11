@@ -7,26 +7,23 @@ from pathlib import Path
 # Shaun
 globalIndex = {}
 
-def createReport():
+def createReport(docindCounter):
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
     and the size of our JSON file and
     put it in a txt file or pdf if you know how '''
 
-    file = open('index.json', 'r+')
+    file = open('index.json')
     data = json.load(file)
     
     numTokens = len(data)
     fileSize = os.path.getsize('index.json')
-    numDocs = 0
-    for listPairs in data:
-        numDocs += len(listPairs[0])
-    file.close()
+    numDocs = docindCounter
 
     with open("report.txt", "r+") as file:
         file.write("Assignment 3 Milestone 1 Report \n")
-        file.write(f"Number of unique tokens: {numTokens}")
-        file.write(f"Number of documents {numDocs}")
-        file.write(f"Size of Index (bytes): {fileSize}")
+        file.write(f"Number of unique tokens: {numTokens}\n")
+        file.write(f"Number of documents {numDocs}\n")
+        file.write(f"Size of Index (bytes): {fileSize}\n")
 
 
 # Ayako
@@ -90,7 +87,8 @@ if __name__=="__main__":
                     createIndex(parsedTokens, docIDInd)
                     docIDInd+=1
                     addPathToDocInd(child2.name, docIDInd)
-    createReport()
+
+    createReport(docIDInd)
         
 
 
