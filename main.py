@@ -22,6 +22,7 @@ def createReport():
     file.close()
 
     with open("report.txt", "r") as file:
+        file.write("Assignment 3 Milestone 1 Report \n")
         file.write(f"Number of unique tokens: {numTokens}")
         file.write(f"Number of documents {numDocs}")
         file.write(f"Size of Index (bytes): {fileSize}")
