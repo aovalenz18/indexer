@@ -4,8 +4,7 @@ import json
 import os
 from pathlib import Path
 
-# Shaun
-globalIndex = {}
+
 
 def createReport(docindCounter):
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
@@ -72,7 +71,7 @@ if __name__=="__main__":
     allTokens = {}
     "iterate through DEV directory and have each file go through the below"
     #Open the initial DEV directory
-    for child in Path('DEVtesting').iterdir():
+    for child in Path('DEV').iterdir():
         #discard hidden files
         if not child.name.startswith('.'):
             #Open the subdirectories
@@ -85,6 +84,10 @@ if __name__=="__main__":
                     createIndex(parsedTokens, docIDInd)
                     addPathToDocInd(child2.name, docIDInd)
 
+    with open('index.json', 'r+') as jsonFile:
+        jsonFile.seek(0, io.SEEK_END)
+        json.dump(globalIndex, jsonFile, indent=4)
+    
     createReport(docIDInd)
         
 
