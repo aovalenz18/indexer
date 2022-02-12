@@ -1,12 +1,13 @@
 import json
 import nltk
 import io
+import os
 
 # Holds on to current indexs
 globalIndex = {}
 
 # Counter for how many words are in globalIndex
-globalIndexCounter=0
+globalIndexCounter = 0
 
 def createIndex(tokens: [str], html: int):
     """creates the index of all tokens with list of postings
@@ -47,7 +48,8 @@ def createIndex(tokens: [str], html: int):
             globalIndex[token][1] += 1
         else:
             globalIndex[token] = [{html: [freqDict[token]]}, 1]
-            # globalIndexCounter += 1        # will add this part when updating file part is done
+        
+        globalIndexCounter += 1        # will add this part when updating file part is done
         #print(token)
 
     
@@ -105,11 +107,11 @@ def updateFile(indexDict, fileName):
     filePath = "indexFiles\\" + fileName
     file = open(filePath, "r+")
     
+
+    fileDict = {}
     # check if size of file is 0
     # set the fileDict to empty or load in prefilled in dictionary from file
-    if os.stat(filePath).st_size == 0:
-        fileDict = {}
-    else:
+    if os.stat(filePath).st_size != 0:
         fileDict = json.load(file)
 
     # compare indexDict and loaded dictionay and update the loaded dictionary
@@ -131,5 +133,6 @@ def updateFile(indexDict, fileName):
     # maybe sort the dictionary if wanted to
     with open(filePath, 'r+') as jsonFile:
         jsonFile.seek(0)
+        jsonFile.truncate()
         json.dump(fileDict, jsonFile, indent=4)
 
