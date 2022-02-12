@@ -50,12 +50,12 @@ def createIndex(tokens: [str], html: int):
             # globalIndexCounter += 1        # will add this part when updating file part is done
         #print(token)
 
-    '''
-    # change to update to file when globalIndexCounter > 30000 ?
-    if globalIndexCounter > 30000
+    
+    # change to update to file when globalIndexCounter > 300000 ?
+    if globalIndexCounter > 300000:
         dumpGlobalIndexToFiles()
 
-
+    '''
     # PUT WRITING INTO INDEX.JSON IN THE MAIN FOR NOW SO IT WILL ONLY CALL ONCE - AYAKO
     # if index is a multiple of 100, we dump into jsonFile and clear the global index
     #if html % 100 == 0 or html < 100:
@@ -74,27 +74,44 @@ def dumpGlobalIndexToFiles():
     Divide the dictionaries into sections: a-h, i-p, q-z + #
     Update each file according to each section-> file update
     '''
+    subDict1 = {}
+    subDict2 = {}
+    subDict3 = {}
 
+    for token in globalIndex:
+        if token[0] >= "a" and token[0] <= "h":
+            subDict1[token] = globalIndex[token]
+        elif token[0] >= "i" and token[0] <= "p":
+            subDict2[token] = globalIndex[token]
+        else:
+            subDict3[token] = globalIndex[token]
 
     # Refresh the global index and counter
     globalIndex.clear()
     globalIndexCounter = 0
 
-    pass
+    #update file with the sud-dictionaries
+    updateFile(subDict1, "indexFile1.json")
+    updateFile(subDict2, "indexFile2.json")
+    updateFile(subDict3, "indexFile3.json")
+
 
 def updateFile(indexDict, fileName):
     '''
     indexDict - index list taken from the global index
     fileName - name of the file that we are updating
     '''
-    # open the file from indexFiles/"fileName" as r+
+    # open the file from indexFiles/"fileName"
+    filePath = "indexFiles\\" + fileName
+    file = open(filePath, "r+")
+    
+    # check if size of file is 0
+    # set the fileDict to empty or load in prefilled in dictionary from file
+    if os.stat(filePath).st_size == 0:
+        fileDict = {}
+    else:
+        fileDict = json.load(file)
 
-
-    # load dictionary from the file
-    fileDict = load function
-
-
-    # DONE i think...
     # compare indexDict and loaded dictionay and update the loaded dictionary
     for token in indexDict:
         if token in fileDict:
@@ -104,15 +121,15 @@ def updateFile(indexDict, fileName):
                 #update the doc frequency by adding 
                 fileDict[token][1] += indexDict[token][1]
         else:
-            globalIndex[token] = indexDict[token]
+            fileDict[token] = indexDict[token]
 
-    
+     # close file
+    file.close()
+
     # fill file with loaded dictionary (fileDict)- 
     # maybe need to delete content beforehand?
     # maybe sort the dictionary if wanted to
+    with open(filePath, 'r+') as jsonFile:
+        jsonFile.seek(0)
+        json.dump(fileDict, jsonFile, indent=4)
 
-
-    # close file
-
-
-    pass
