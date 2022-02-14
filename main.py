@@ -11,12 +11,29 @@ def createReport(docindCounter):
     and the size of our JSON file and
     put it in a txt file or pdf if you know how '''
 
-    file = open('index.json')
+    filePath1 = "indexFiles/" + 'indexFile1.json'
+    filePath2 = "indexFiles/" + 'indexFile2.json'
+    filePath3 = "indexFiles/" + 'indexFile3.json'
+
+    file = open(filePath1)
     data = json.load(file)
-    
     numTokens = len(data)
-    fileSize = os.path.getsize('index.json')
+    fileSize = os.path.getsize(filePath1)
     numDocs = docindCounter
+    file.close()
+
+    file = open(filePath2)
+    data = json.load(file)
+    numTokens += len(data)
+    fileSize += os.path.getsize(filePath2)
+    file.close()
+
+    file = open(filePath3)
+    data = json.load(file)
+    numTokens += len(data)
+    fileSize += os.path.getsize(filePath3)
+    file.close()
+
 
     with open("report.txt", "r+") as file:
         file.write("Assignment 3 Milestone 1 Report \n")
@@ -81,13 +98,15 @@ if __name__=="__main__":
                     parsedTokens = parseTokens(tokens)
                     #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     docIDInd+=1
+                    print(docIDInd)
                     createIndex(parsedTokens, docIDInd)
                     addPathToDocInd(child2.name, docIDInd)
 
-    with open('index.json', 'r+') as jsonFile:
-        jsonFile.seek(0, io.SEEK_END)
-        json.dump(globalIndex, jsonFile, indent=4)
-    
+    dumpGlobalIndexToFiles()
+    # with open('index.json', 'r+') as jsonFile:
+    #     jsonFile.seek(0, io.SEEK_END)
+    #     json.dump(globalIndex, jsonFile, indent=4)
+
     createReport(docIDInd)
         
 

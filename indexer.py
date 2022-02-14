@@ -4,6 +4,8 @@ import io
 import os
 
 # Holds on to current indexs
+import indexer
+
 globalIndex = {}
 
 # Counter for how many words are in globalIndex
@@ -28,6 +30,7 @@ def createIndex(tokens: [str], html: int):
 
     # go through all tokens and add to the global indexer
     for token in freqDict:
+        gCount = indexer.globalIndexCounter
         '''
         # Anthony's work
         postings = [{html: [freqDict[token]]}, 0]
@@ -48,14 +51,16 @@ def createIndex(tokens: [str], html: int):
             globalIndex[token][1] += 1
         else:
             globalIndex[token] = [{html: [freqDict[token]]}, 1]
-        
-        globalIndexCounter += 1        # will add this part when updating file part is done
+            gCount += 1
+            # will add this part when updating file part is done
         #print(token)
 
     
     # change to update to file when globalIndexCounter > 300000 ?
-    if globalIndexCounter > 300000:
+    if gCount > 300000:
         dumpGlobalIndexToFiles()
+
+    indexer.globalIndexCounter = gCount
 
     '''
     # PUT WRITING INTO INDEX.JSON IN THE MAIN FOR NOW SO IT WILL ONLY CALL ONCE - AYAKO
@@ -104,7 +109,7 @@ def updateFile(indexDict, fileName):
     fileName - name of the file that we are updating
     '''
     # open the file from indexFiles/"fileName"
-    filePath = "indexFiles\\" + fileName
+    filePath = "indexFiles/" + fileName
     file = open(filePath, "r+")
     
 
