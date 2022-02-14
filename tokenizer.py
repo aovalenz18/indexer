@@ -28,7 +28,7 @@ def openHtml(file):
 
 
 def parseTokens(tokens):
-    'porter stemming, do not take out stopwords'
+    """porter stemming, do not take out stopwords"""
     'return a list of parsed tokens'
     'Ayako'
     ps = PorterStemmer()
