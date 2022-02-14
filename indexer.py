@@ -51,8 +51,12 @@ def createIndex(tokens: [str], html: int):
             globalIndex[token][1] += 1
         else:
             globalIndex[token] = [{html: [freqDict[token]]}, 1]
+
             gCount += 1
             # will add this part when updating file part is done
+
+            #globalIndexCounter += 1        # will add this part when updating file part is done
+
         #print(token)
 
     

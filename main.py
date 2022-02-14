@@ -103,10 +103,13 @@ if __name__=="__main__":
                     addPathToDocInd(child2.name, docIDInd)
 
     dumpGlobalIndexToFiles()
-    # with open('index.json', 'r+') as jsonFile:
-    #     jsonFile.seek(0, io.SEEK_END)
-    #     json.dump(globalIndex, jsonFile, indent=4)
-
+    
+    '''
+    with open('index.json', 'r+') as jsonFile:
+        jsonFile.seek(0, io.SEEK_END)
+        json.dump(globalIndex, jsonFile, indent=4)
+    '''
+    
     createReport(docIDInd)
         
 
