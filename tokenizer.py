@@ -2,6 +2,8 @@ from nltk.stem import PorterStemmer
 import json
 import re
 from bs4 import BeautifulSoup
+from selectolax.parser import HTMLParser
+import os
 
 # kazeem
 def openHtml(file):
@@ -9,11 +11,14 @@ def openHtml(file):
     'returns a list of all tokens in the html page '
     newFile = open(file)
     fileData = json.load(newFile) #file data is now a dictionary
+    newFile.close()
 
-    soup = BeautifulSoup(fileData["content"], 'html.parser')  # creates the soup object to extract all the text
-
-    fullText = soup.get_text().lower() # gets all text from the document in one string
-
+    if os.path.getsize(file) > 10000000:
+        soup = BeautifulSoup(fileData["content"], 'html.parser')  # creates the soup object to extract all the text
+        fullText = soup.get_text().lower() # gets all text from the document in one string
+    else:
+        soup = HTMLParser(fileData["content"])
+        fullText = soup.text().lower()
     #tokenizes strings
     tokens = re.findall(r"[a-zA-Z0-9]+", fullText)
 
