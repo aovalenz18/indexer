@@ -56,7 +56,7 @@ def matrixResults(matrix: [list], tokenDict: dict):
     listMostDesirable = []
     bestMatch = len(matrix)
     infLoop = 0
-    while len(listMostDesirable <= 5):
+    while len(listMostDesirable < 5):
         if infLoop == 8:
             break
         for i in range(len(matrix[0])):
