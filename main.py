@@ -11,31 +11,23 @@ def createReport(docindCounter):
     and the size of our JSON file and
     put it in a txt file or pdf if you know how '''
 
-    filePath1 = "indexFiles/" + 'indexFile1.json'
-    filePath2 = "indexFiles/" + 'indexFile2.json'
-    filePath3 = "indexFiles/" + 'indexFile3.json'
-
-    file = open(filePath1)
-    data = json.load(file)
-    numTokens = len(data)
-    fileSize = os.path.getsize(filePath1)
+    numTokens = 0
+    fileSize = 0
     numDocs = docindCounter
-    file.close()
 
-    file = open(filePath2)
-    data = json.load(file)
-    numTokens += len(data)
-    fileSize += os.path.getsize(filePath2)
-    file.close()
+    for i in range(1,11):
+        filePath = "indexFiles/indexFile" + str(i) + ".json"
+    
+        file = open(filePath)
 
-    file = open(filePath3)
-    data = json.load(file)
-    numTokens += len(data)
-    fileSize += os.path.getsize(filePath3)
-    file.close()
+        data = json.load(file)
+        numTokens += len(data)
+        fileSize += os.path.getsize(filePath)
 
+        file.close()
 
     with open("report.txt", "r+") as file:
+        file.truncate(0)
         file.write("Assignment 3 Milestone 1 Report \n")
         file.write(f"Number of unique tokens: {numTokens}\n")
         file.write(f"Number of documents {numDocs}\n")
@@ -81,14 +73,31 @@ def printIndex(index):
 	
 	f.close()
 
+#Ayako
+def resetIndexFiles():
+    '''
+    Deletes all of the indexFile's data
+    '''
+    for i in range(1,11):
+        filePath = "indexFiles/indexFile" + str(i) + ".json"
+        # open file 
+        file = open(filePath, "r+") 
+        
+        # absolute file positioning
+        file.seek(0) 
+        
+        # to erase all data 
+        file.truncate() 
+
 
 if __name__=="__main__":
     "NOTE: There are 55,393 files so WILL take a while"
     docIDInd = 0
     allTokens = {}
+    resetIndexFiles()
     "iterate through DEV directory and have each file go through the below"
     #Open the initial DEV directory
-    for child in Path('DEV').iterdir():
+    for child in Path('DEVtesting').iterdir():
         #discard hidden files
         if not child.name.startswith('.'):
             #Open the subdirectories
@@ -100,7 +109,8 @@ if __name__=="__main__":
                     docIDInd+=1
                     print(docIDInd)
                     createIndex(parsedTokens, docIDInd)
-                    addPathToDocInd(child2.name, docIDInd)
+                    addPathToDocInd(str(child2.resolve()), docIDInd)
+
 
     dumpGlobalIndexToFiles()
     
@@ -108,7 +118,7 @@ if __name__=="__main__":
     with open('index.json', 'r+') as jsonFile:
         jsonFile.seek(0, io.SEEK_END)
         json.dump(globalIndex, jsonFile, indent=4)
-    '''
+'''
     
     createReport(docIDInd)
         

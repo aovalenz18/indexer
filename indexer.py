@@ -63,6 +63,7 @@ def createIndex(tokens: [str], html: int):
     # change to update to file when globalIndexCounter > 300000 ?
     if gCount > 300000:
         dumpGlobalIndexToFiles()
+        gCount = 0
 
     indexer.globalIndexCounter = gCount
 
@@ -85,17 +86,55 @@ def dumpGlobalIndexToFiles():
     Divide the dictionaries into sections: a-h, i-p, q-z + #
     Update each file according to each section-> file update
     '''
-    subDict1 = {}
-    subDict2 = {}
-    subDict3 = {}
+    subDict1 = {} #a,b,c
+    subDict2 = {} #d,e,f
+    subDict3 = {} #g,h,i
+    subDict4 = {} #j,k,l
+    subDict5 = {} #m,n
+    subDict6 = {} #o,p
+    subDict7 = {} #q,r
+    subDict8 = {} #s,t
+    subDict9 = {} #u,v,w
+    subDict10 = {} #x,y, z, all others
 
     for token in globalIndex:
-        if token[0] >= "a" and token[0] <= "h":
+        #print(token[0])
+        if token[0] >= "a" and token[0] <= "c":
             subDict1[token] = globalIndex[token]
-        elif token[0] >= "i" and token[0] <= "p":
+            #print("sub1")
+        elif token[0] >= "d" and token[0] <= "f":
             subDict2[token] = globalIndex[token]
-        else:
+            #print("sub2")
+        elif token[0] >= "g" and token[0] <= "i":
             subDict3[token] = globalIndex[token]
+            #print("sub3")
+        elif token[0] >= "j" and token[0] <= "l":
+            subDict4[token] = globalIndex[token]
+            #print("sub4")
+        elif token[0] >= "m" and token[0] <= "n":
+            subDict5[token] = globalIndex[token]
+            #print("sub5")
+        elif token[0] >= "o" and token[0] <= "p":
+            subDict6[token] = globalIndex[token]
+            #print("sub6")
+        elif token[0] >= "q" and token[0] <= "r":
+            subDict7[token] = globalIndex[token]
+            #print("sub7")
+        elif token[0] >= "s" and token[0] <= "t":
+            subDict8[token] = globalIndex[token]
+            #print("sub8")
+        elif token[0] >= "u" and token[0] <= "w":
+            subDict9[token] = globalIndex[token]
+            #print("sub9")
+        else:
+            subDict10[token] = globalIndex[token]
+            #print("sub10")
+
+
+    #print("sub1", subDict1)
+    #print("sub2", subDict2)
+    #print("sub3", subDict3)
+    #print("sub4", subDict4)
 
     # Refresh the global index and counter
     globalIndex.clear()
@@ -105,6 +144,13 @@ def dumpGlobalIndexToFiles():
     updateFile(subDict1, "indexFile1.json")
     updateFile(subDict2, "indexFile2.json")
     updateFile(subDict3, "indexFile3.json")
+    updateFile(subDict4, "indexFile4.json")
+    updateFile(subDict5, "indexFile5.json")
+    updateFile(subDict6, "indexFile6.json")
+    updateFile(subDict7, "indexFile7.json")
+    updateFile(subDict8, "indexFile8.json")
+    updateFile(subDict9, "indexFile9.json")
+    updateFile(subDict10, "indexFile10.json")
 
 
 def updateFile(indexDict, fileName):
@@ -141,7 +187,6 @@ def updateFile(indexDict, fileName):
     # maybe need to delete content beforehand?
     # maybe sort the dictionary if wanted to
     with open(filePath, 'r+') as jsonFile:
-        jsonFile.seek(0)
-        jsonFile.truncate()
+        jsonFile.seek(0, io.SEEK_END)
         json.dump(fileDict, jsonFile, indent=4)
 
