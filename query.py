@@ -1,3 +1,7 @@
+from subprocess import list2cmdline
+from typing import final
+
+
 def search(tokens: list):
     # Kazeem
     """
@@ -27,4 +31,23 @@ def matrixResults(matrix: [list], tokenDict: dict):
     Go through matrix and find combination of values where the specified tokens appear,
     and navigate through dictionary to get the corresponding file path name
     '''
-    pass
+
+    listMostDesirable = []
+    bestMatch = len(matrix)
+    infLoop = 0
+    while len(listMostDesirable <= 5):
+        if infLoop == 8:
+            break
+        for i in range(len(matrix[0])):
+            incCount = 0
+            for token in matrix:
+                if token[i] == 1:
+                    incCount += 1
+            if incCount == bestMatch:
+                listMostDesirable.append(matrix[0][i])
+        bestMatch-=1
+        infLoop+=1
+        
+    return listMostDesirable
+
+
