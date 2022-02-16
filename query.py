@@ -1,4 +1,6 @@
 import numpy as np
+from subprocess import list2cmdline
+from typing import final
 
 
 def search(tokens: list):
@@ -50,65 +52,23 @@ def matrixResults(matrix: [list], tokenDict: dict):
     Go through matrix and find combination of values where the specified tokens appear,
     and navigate through dictionary to get the corresponding file path name
     '''
-    pass
 
-if __name__ == "__main__":
+    listMostDesirable = []
+    bestMatch = len(matrix)
+    infLoop = 0
+    while len(listMostDesirable <= 5):
+        if infLoop == 8:
+            break
+        for i in range(len(matrix[0])):
+            incCount = 0
+            for token in matrix:
+                if token[i] == 1:
+                    incCount += 1
+            if incCount == bestMatch:
+                listMostDesirable.append(matrix[0][i])
+        bestMatch-=1
+        infLoop+=1
+        
+    return listMostDesirable
 
-    adict = {"real": [
-        {
-            "9": [
-                2
-            ],
-            "8": [
-                2
-            ]
-        },
-        0
-    ],
-    "time": [
-        {
-            "9": [
-                2
-            ],
-            "1": [
-                2
-            ]
-        },
-        0
-    ],
-    "dre": [
-        {
-            "9": [
-                2
-            ],
-            "4": [
-                2
-            ]
-        },
-        0
-    ],
-    "feedback": [
-        {
-            "9": [
-                2
-            ],
-            "7": [
-                2
-            ]
-        },
-        0
-    ],
-    "if": [
-        {
-            "9": [
-                2
-            ],
-            "5": [
-                2
-            ]
-        },
-        0
-    ],}
 
-    booleanMatrix = createMatrix(adict)
-    print(booleanMatrix)
