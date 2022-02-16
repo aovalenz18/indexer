@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 from subprocess import list2cmdline
 from typing import final
@@ -9,7 +11,13 @@ def search(tokens: list):
     :param tokens: list of query tokens from user input
     :return: a smaller dictionary with the tokens that were searched for with original values
     """
-    pass
+    indexFile = open("index.json")
+    fileData = json.load(indexFile)
+    resultDict = dict()
+
+    for token in tokens:
+        resultDict[token] = fileData[token]
+    return resultDict
 
 
 def createMatrix(tokenDict: dict):
