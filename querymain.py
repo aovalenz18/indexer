@@ -11,7 +11,7 @@ if __name__=="__main__":
 
     while userInput != "q":
         # Add this part when the functions gets done
-        """
+        
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict = search(userInput)
 
@@ -19,12 +19,12 @@ if __name__=="__main__":
         matrix = createMatrix(indexDict)
 
         # Get the top 5 documents based on the matrix
-        documentList = matrixResults(matrix, indexDict)
+        documentList = matrixResults(matrix[0], matrix[1])
 
         # Output the documentList
         # printResult(documentList)
         print(documentList)
-        """
+        
         
         
 
