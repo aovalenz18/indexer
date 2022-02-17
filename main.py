@@ -1,9 +1,6 @@
 from tokenizer import *
 from indexer import *
-import json
-import os
-from pathlib import Path
-
+from fileRelated import *
 
 
 def createReport(docindCounter):
@@ -85,23 +82,7 @@ def printIndex(index):
 	print(data[index]["path"])
 	print(data[index]["url"])
 	
-	f.close()
-
-#Ayako
-def resetIndexFiles():
-    '''
-    Deletes all of the indexFile's data
-    '''
-    for i in range(1,11):
-        filePath = "indexFiles/indexFile" + str(i) + ".json"
-        # open file 
-        file = open(filePath, "r+") 
-        
-        # absolute file positioning
-        file.seek(0) 
-        
-        # to erase all data 
-        file.truncate() 
+	f.close() 
 
 
 if __name__=="__main__":
@@ -111,7 +92,7 @@ if __name__=="__main__":
     resetIndexFiles()
     "iterate through DEV directory and have each file go through the below"
     #Open the initial DEV directory
-    for child in Path('DEVtesting').iterdir():
+    for child in Path('DEV').iterdir():
         #discard hidden files
         if not child.name.startswith('.'):
             #Open the subdirectories
@@ -132,7 +113,7 @@ if __name__=="__main__":
     with open('index.json', 'r+') as jsonFile:
         jsonFile.seek(0, io.SEEK_END)
         json.dump(globalIndex, jsonFile, indent=4)
-'''
+    '''
     
     createReport(docIDInd)
         
