@@ -43,8 +43,22 @@ def addPathToDocInd(path, docIDInd):
     append the path to the docIndex.json
     Returns nothing
     '''
+
+    # Get the url
+    newFile = open(path)
+    fileData = json.load(newFile) #file data is now a dictionary
+    newFile.close()
+
+    if os.path.getsize(path) > 10000000:
+        soup = BeautifulSoup(fileData["url"], 'html.parser')  # creates the soup object to extract all the text
+        url = soup.get_text() # gets all text from the document in one string
+    else:
+        soup = HTMLParser(fileData["url"])
+        url = soup.text()
+
+    # write into the file
     docData = {docIDInd:{'path': path, 
-						 'htmlSite': 'testing'}}
+						 'url': url}}
 	
     if(docIDInd == 1):
         with open("docIndex.json", "r+") as file:
@@ -69,7 +83,7 @@ def printIndex(index):
 	data = json.load(f)
 	
 	print(data[index]["path"])
-	print(data[index]["htmlSite"])
+	print(data[index]["url"])
 	
 	f.close()
 
@@ -109,7 +123,7 @@ if __name__=="__main__":
                     docIDInd+=1
                     print(docIDInd)
                     createIndex(parsedTokens, docIDInd)
-                    addPathToDocInd(str(child2.resolve()), docIDInd)
+                    addPathToDocInd(str(child2), docIDInd)
 
 
     dumpGlobalIndexToFiles()
