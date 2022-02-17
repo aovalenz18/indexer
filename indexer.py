@@ -28,9 +28,11 @@ def createIndex(tokens: [str], html: int):
     freqDict = nltk.FreqDist(tokens)
     # print(tokens)
 
+    gCount = indexer.globalIndexCounter
+
     # go through all tokens and add to the global indexer
     for token in freqDict:
-        gCount = indexer.globalIndexCounter
+        
         '''
         # Anthony's work
         postings = [{html: [freqDict[token]]}, 0]
@@ -63,7 +65,7 @@ def createIndex(tokens: [str], html: int):
     # change to update to file when globalIndexCounter > 300000 ?
     if gCount > 300000:
         dumpGlobalIndexToFiles()
-        gCount = 0
+        gCount = indexer.globalIndexCounter
 
     indexer.globalIndexCounter = gCount
 
@@ -138,7 +140,7 @@ def dumpGlobalIndexToFiles():
 
     # Refresh the global index and counter
     globalIndex.clear()
-    globalIndexCounter = 0
+    indexer.globalIndexCounter = 0
 
     #update file with the sud-dictionaries
     updateFile(subDict1, "indexFile1.json")
