@@ -4,6 +4,13 @@ import numpy as np
 from subprocess import list2cmdline
 from typing import final
 
+def findFile(tokens: list):
+    # Anthony
+    """
+    :param tokens: list of the query tokens from user input
+    :return: returns a list of the files that we need to search to find the specified tokens
+    """
+    pass
 
 def search(tokens: list):
     # Kazeem
@@ -48,10 +55,12 @@ def createMatrix(tokenDict: dict):
             matrix[i, pageMapping[page]] = 1
         i += 1
 
-    return matrix
+    pageMapping = {value: key for key,value in pageMapping.items()}
+
+    return matrix, pageMapping
 
 
-def matrixResults(matrix: [list], tokenDict: dict):
+def matrixResults(matrix: [list], pageMap: dict):
     # Shaun
     '''
     :param matrix: boolean matrix that holds all occurences of token in a webpage
