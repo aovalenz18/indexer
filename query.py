@@ -75,7 +75,7 @@ def matrixResults(matrix: [list], pageMapping: dict):
     listMostDesirable = []
     bestMatch = len(matrix)
     infLoop = 0
-    while len(listMostDesirable < 5):
+    while len(listMostDesirable) < 5:
         if infLoop == 8:
             break
         for i in range(len(matrix[0])):
@@ -92,7 +92,7 @@ def matrixResults(matrix: [list], pageMapping: dict):
         fileData = json.load(file)
         finalTop5 = []
         for docInd in listMostDesirable:
-            finalTop5.append(finalTop5[docInd]['path'])
+            finalTop5.append(fileData[docInd]['path'])
         fileData.close()
         
     return finalTop5
