@@ -79,12 +79,13 @@ def matrixResults(matrix: [list], pageMapping: dict):
         if infLoop == 8:
             break
         for i in range(len(matrix[0])):
-            incCount = 0
-            for token in matrix:
-                if token[i] == 1:
-                    incCount += 1
-            if incCount == bestMatch:
-                listMostDesirable.append(pageMapping[i])
+            if len(listMostDesirable) < 5:
+                incCount = 0
+                for token in matrix:
+                    if token[i] == 1:
+                        incCount += 1
+                if incCount == bestMatch:
+                    listMostDesirable.append(pageMapping[i])
         bestMatch-=1
         infLoop+=1
 
