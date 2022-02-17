@@ -91,9 +91,15 @@ def matrixResults(matrix: [list], pageMapping: dict):
 
     with open("docIndex.json", "r+") as file:
         fileData = json.load(file)
+        top5Path = []
         finalTop5 = []
         for docInd in listMostDesirable:
-            finalTop5.append(fileData[docInd]['path'])
+            top5Path.append(fileData[docInd]['path'])
+        
+    for docPath in top5Path:
+        with open(docPath, "r+") as jsonFile:
+            indSiteData = json.load(jsonFile)
+            finalTop5.append(indSiteData["url"])
         
     return finalTop5
 
