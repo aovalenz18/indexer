@@ -51,7 +51,7 @@ def createMatrix(tokenDict: dict):
     return matrix
 
 
-def matrixResults(matrix: [list], tokenDict: dict):
+def matrixResults(matrix: [list], pageMapping: dict):
     # Shaun
     '''
     :param matrix: boolean matrix that holds all occurences of token in a webpage
@@ -73,7 +73,7 @@ def matrixResults(matrix: [list], tokenDict: dict):
                 if token[i] == 1:
                     incCount += 1
             if incCount == bestMatch:
-                listMostDesirable.append(matrix[0][i])
+                listMostDesirable.append(pageMapping[i])
         bestMatch-=1
         infLoop+=1
         
