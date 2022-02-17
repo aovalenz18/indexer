@@ -76,7 +76,14 @@ def matrixResults(matrix: [list], pageMapping: dict):
                 listMostDesirable.append(pageMapping[i])
         bestMatch-=1
         infLoop+=1
+
+    with open("docIndex.json", "r+") as file:
+        fileData = json.load(file)
+        finalTop5 = []
+        for docInd in listMostDesirable:
+            finalTop5.append(finalTop5[docInd]['path'])
+        fileData.close()
         
-    return listMostDesirable
+    return finalTop5
 
 
