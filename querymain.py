@@ -22,9 +22,12 @@ if __name__=="__main__":
         documentList = matrixResults(matrix, indexDict)
 
         # Output the documentList
-        printResult(documentList)
+        # printResult(documentList)
+        print(documentList)
         """
         
+        
+
         # Used to see what the parsed userInput look like
         print(userInput)
 

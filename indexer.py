@@ -189,6 +189,7 @@ def updateFile(indexDict, fileName):
     # maybe need to delete content beforehand?
     # maybe sort the dictionary if wanted to
     with open(filePath, 'r+') as jsonFile:
+        jsonFile.truncate(0)
         jsonFile.seek(0, io.SEEK_END)
         json.dump(fileDict, jsonFile, indent=4)
 
