@@ -93,7 +93,6 @@ def matrixResults(matrix: [list], pageMapping: dict):
         finalTop5 = []
         for docInd in listMostDesirable:
             finalTop5.append(fileData[docInd]['path'])
-        fileData.close()
         
     return finalTop5
 
