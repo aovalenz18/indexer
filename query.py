@@ -60,7 +60,9 @@ def createMatrix(tokenDict: dict):
     return matrix, pageMapping
 
 
-def matrixResults(matrix: [list], pageMap: dict):
+
+def matrixResults(matrix: [list], pageMapping: dict):
+
     # Shaun
     '''
     :param matrix: boolean matrix that holds all occurences of token in a webpage
@@ -82,10 +84,17 @@ def matrixResults(matrix: [list], pageMap: dict):
                 if token[i] == 1:
                     incCount += 1
             if incCount == bestMatch:
-                listMostDesirable.append(matrix[0][i])
+                listMostDesirable.append(pageMapping[i])
         bestMatch-=1
         infLoop+=1
+
+    with open("docIndex.json", "r+") as file:
+        fileData = json.load(file)
+        finalTop5 = []
+        for docInd in listMostDesirable:
+            finalTop5.append(finalTop5[docInd]['path'])
+        fileData.close()
         
-    return listMostDesirable
+    return finalTop5
 
 
