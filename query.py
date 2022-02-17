@@ -3,6 +3,7 @@ import json
 import numpy as np
 from subprocess import list2cmdline
 from typing import final
+from pathlib import Path
 
 def findFile(tokens: list):
     # Anthony
@@ -97,7 +98,8 @@ def matrixResults(matrix: [list], pageMapping: dict):
             top5Path.append(fileData[docInd]['path'])
         
     for docPath in top5Path:
-        with open(docPath, "r+") as jsonFile:
+        path = Path(docPath)
+        with open(path.resolve(), "r+") as jsonFile:
             indSiteData = json.load(jsonFile)
             finalTop5.append(indSiteData["url"])
         
