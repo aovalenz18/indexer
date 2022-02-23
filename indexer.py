@@ -57,7 +57,7 @@ def createIndex(tokens: [str], html: int):
             gCount += 1
             # will add this part when updating file part is done
 
-            #globalIndexCounter += 1        # will add this part when updating file part is done
+            # globalIndexCounter += 1        # will add this part when updating file part is done
 
         #print(token)
 
@@ -193,3 +193,21 @@ def updateFile(indexDict, fileName):
         jsonFile.seek(0, io.SEEK_END)
         json.dump(fileDict, jsonFile, indent=4)
 
+
+def mergeAndMakeIndDict():
+    '''
+    Merges each of the index jsons into a single text file and creates a dictionary
+    that keeps track of each token and their line number in the
+    index file
+    '''
+    
+    #load json into dict
+
+    #parse dict lists into "word docFreq docid,weight/tf..."
+
+    #write to single text file
+
+    #create dictionary with token and line num
+
+    #store dictionary in a json
+    pass
