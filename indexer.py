@@ -1,7 +1,9 @@
+from heapq import merge
 import json
 import nltk
 import io
 import os
+from pathlib import Path
 
 # Holds on to current indexs
 import indexer
@@ -200,14 +202,36 @@ def mergeAndMakeIndDict():
     that keeps track of each token and their line number in the
     index file
     '''
+
+    # clear file before running
+    with open("txtIndex.txt", "a") as txtFile:
+        txtFile.truncate(0)
+    # create dictionary with token and line num
+    lineNumDict = {}
     
     # load json into dict
-
-    # parse dict lists into "word docFreq docid,weight/tf..."
-
-    # write to single text file
-
-    # create dictionary with token and line num
+    linenum = 0
+    for child in Path('indexFiles').iterdir():
+        file = open(child)
+        data = json.load(file)
+        # parse dict lists into "word docFreq docid,weight/tf..."
+        with open("txtIndex.txt", "a") as txtFile:
+            for token, postList in data.items():
+                tokenStr = f"{token} {len(postList)} "
+                for post in postList:
+                    tokenStr += f"{post[0]},{post[1]} "
+                # write to single text file
+                txtFile.write(f"{tokenStr} \n")
+                linenum += 1
+                # add token to lineNumDict
+                lineNumDict[token] = linenum
+                
 
     # store dictionary in a json
-    pass
+    with open("lineNums.json", 'r+') as jsonFile:
+        jsonFile.truncate(0)
+        jsonFile.seek(0, io.SEEK_END)
+        json.dump(lineNumDict, jsonFile, indent=4)
+
+if __name__ == "__main__":
+    mergeAndMakeIndDict()
