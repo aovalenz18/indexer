@@ -201,13 +201,13 @@ def mergeAndMakeIndDict():
     index file
     '''
     
-    #load json into dict
+    # load json into dict
 
-    #parse dict lists into "word docFreq docid,weight/tf..."
+    # parse dict lists into "word docFreq docid,weight/tf..."
 
-    #write to single text file
+    # write to single text file
 
-    #create dictionary with token and line num
+    # create dictionary with token and line num
 
-    #store dictionary in a json
+    # store dictionary in a json
     pass
