@@ -5,7 +5,7 @@ from pathlib import Path
 #Ayako
 def resetIndexFiles():
     '''
-    Deletes all of the indexFile's data
+    Deletes all of the indexFile and doxIndex's data
     '''
     for i in range(0,10):
         filePath = "indexFiles/" + str(i) + ".json"
@@ -17,12 +17,21 @@ def resetIndexFiles():
         
         # to erase all data 
         file.truncate()
+
+        file.close()
         
     for i in range(97, 123): #a-z
         filePath = "indexFiles/" + chr(i) + ".json"
         file = open(filePath, "r+") 
         file.seek(0)
         file.truncate()
+        file.close()
+
+    # Delete information in docIndex.json
+    file = open("docIndex.json", "r+") 
+    file.seek(0)
+    file.truncate()
+    file.close()
 
 #Ayako
 def getIndexFilePath(token):

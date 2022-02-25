@@ -5,13 +5,13 @@ import io
 import os
 from pathlib import Path
 
-# Holds on to current indexs
-import indexer
 
+# Holds on to current indexs
 globalIndex = {}
 
-# Counter for how many words are in globalIndex
-globalIndexCounter = 0
+# Stores temporary document ID
+globalDocID = {}
+
 
 def createIndex(tokens: [str], html: int):
     """creates the index of all tokens with list of postings
@@ -19,34 +19,14 @@ def createIndex(tokens: [str], html: int):
     token: [ [html,frequency] ]
     keep appending to value list """
 
-    if html == 1:
-        # Delete the content of index.json
-        file = open("index.json", "r+") 
-        file.seek(0) 
-        file.truncate() 
-
 
     # create a frequency dictionary for all the tokens
     freqDict = nltk.FreqDist(tokens)
     # print(tokens)
 
-    #gCount = indexer.globalIndexCounter
-
     # go through all tokens and add to the global indexer
     for token in freqDict:
         
-        '''
-        # Anthony's work
-        postings = [{html: [freqDict[token]]}, 0]
-        if token in globalIndex:
-            # list of postings
-            postings = globalIndex[token]
-            # add key into document dictionary
-            frequency = postings[0][html][0]
-            updatedFrequency = frequency + freqDict[token]
-            postings[0][html][0] = updatedFrequency # this will have an updated list
-        '''
-
         if token in globalIndex:
             # add in the new posting
             globalIndex[token][0][html] = [freqDict[token]] #freqDict[token] - counter
@@ -56,31 +36,10 @@ def createIndex(tokens: [str], html: int):
         else:
             globalIndex[token] = [{html: [freqDict[token]]}, 1]
 
-            #gCount += 1
-            # will add this part when updating file part is done
-
-            #globalIndexCounter += 1        # will add this part when updating file part is done
-
-        #print(token)
-
-    
+        
     # change to update to file when globalIndexCounter > 300000 ?
-    if html % 10000 == 0:       #gCount > 300000:
+    if html % 10000 == 0: 
         dumpGlobalIndexToFiles()
-        #gCount = indexer.globalIndexCounter
-
-    #indexer.globalIndexCounter = gCount
-
-    '''
-    # PUT WRITING INTO INDEX.JSON IN THE MAIN FOR NOW SO IT WILL ONLY CALL ONCE - AYAKO
-    # if index is a multiple of 100, we dump into jsonFile and clear the global index
-    #if html % 100 == 0 or html < 100:
-    with open('index.json', 'r+') as jsonFile:
-        jsonFile.seek(0, io.SEEK_END)
-        json.dump(globalIndex, jsonFile, indent=4)
-
-        #globalIndex.clear()
-    '''
 
 
 def dumpGlobalIndexToFiles():
@@ -101,18 +60,38 @@ def dumpGlobalIndexToFiles():
 
     for token in globalIndex:
         #print(token[0])
-        #tempDict = dictList[token[0]]
-        #tempDict[token] = globalIndex[token]
-        #dictList[token[0]] = tempDict
         dictList[token[0]][token] = globalIndex[token]
 
-    # Refresh the global index and counter
+    # Refresh the global index
     globalIndex.clear()
-    #indexer.globalIndexCounter = 0
 
     #update file with the sud-dictionaries
     for dictChar in dictList:
         updateFile(dictList[dictChar], str(dictChar)+".json")
+
+
+
+    #-----------UPDATE THE DOCINDEX.JSON-----------
+    file = open("docIndex.json", "r+")
+    
+    
+    # check if size of file is 0
+    # update docIdFileDict depending on if file have prefilled information or not
+    if os.stat("docIndex.json").st_size != 0:
+        docIdFileDict = json.load(file)
+        docIdFileDict.update(globalDocID)
+    else:
+        docIdFileDict = globalDocID
+
+    # write to file
+    file.truncate(0)
+    file.seek(0, io.SEEK_END)
+    json.dump(docIdFileDict, file, indent=4)
+
+     # close file
+    file.close()
+
+    globalDocID.clear()
 
 
 def updateFile(indexDict: dict, fileName):
@@ -134,24 +113,27 @@ def updateFile(indexDict: dict, fileName):
     # compare indexDict and loaded dictionay and update the loaded dictionary
     for token in indexDict:
         if token in fileDict:
-                # merge posting list from indexDict to fileDict's posting list
-                fileDict[token][0].update(indexDict[token][0])
-                
-                #update the doc frequency by adding 
-                fileDict[token][1] += indexDict[token][1]
+            # Delete later when not using old indexing
+            '''
+            # merge posting list from indexDict to fileDict's posting list
+            fileDict[token][0].update(indexDict[token][0])
+            
+            #update the doc frequency by adding 
+            fileDict[token][1] += indexDict[token][1]
+            '''
+            # merge posting list from indexDict to fileDict's posting list
+            fileDict[token] = fileDict[token] + indexDict[token]
         else:
             fileDict[token] = indexDict[token]
 
+    # write to file
+    #file.seek(0)
+    file.truncate(0)
+    file.seek(0, io.SEEK_END)
+    json.dump(fileDict, file, indent=4)
+
      # close file
     file.close()
-
-    # fill file with loaded dictionary (fileDict)- 
-    # maybe need to delete content beforehand?
-    # maybe sort the dictionary if wanted to
-    with open(filePath, 'r+') as jsonFile:
-        jsonFile.truncate(0)
-        jsonFile.seek(0, io.SEEK_END)
-        json.dump(fileDict, jsonFile, indent=4)
 
 
 def mergeAndMakeIndDict():
