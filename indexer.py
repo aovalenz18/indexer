@@ -19,26 +19,15 @@ def createIndex(tokens: [str], html: int):
     token: [ [html,frequency] ]
     keep appending to value list """
 
-
-    # create a frequency dictionary for all the tokens
-    freqDict = nltk.FreqDist(tokens)
-    # print(tokens)
-
-    # go through all tokens and add to the global indexer
-    for token in freqDict:
-        
-        if token in globalIndex:
-            # add in the new posting
-            globalIndex[token][0][html] = [freqDict[token]] #freqDict[token] - counter
-            
-            #update the doc frequency
-            globalIndex[token][1] += 1
+    for tokenTuple in tokens:
+        token = tokenTuple[0]
+        weight = tokenTuple[1]
+        if token not in globalIndex:
+            globalIndex[token] = [[html, weight]]
         else:
-            globalIndex[token] = [{html: [freqDict[token]]}, 1]
+            globalIndex[token].append([html, weight])
 
-        
-    # change to update to file when globalIndexCounter > 300000 ?
-    if html % 10000 == 0: 
+    if html % 15000 == 0: 
         dumpGlobalIndexToFiles()
 
 
