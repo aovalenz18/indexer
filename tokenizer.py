@@ -1,3 +1,4 @@
+import nltk
 from nltk.stem import PorterStemmer
 import json
 import re
@@ -14,32 +15,76 @@ from indexer import globalDocID
 def openHtml(file, docID):
     '''Open files in DEV folder, go through all JSON files and gather text and tokens'''
     'returns a list of all tokens in the html page '
+    # return a list of tuples (word, weight) and the weight is going to include the frequency,
+    # type of word, and at the end call parse tokens on all the words
+
     newFile = open(file)
     fileData = json.load(newFile) #file data is now a dictionary
     newFile.close()
 
-    if os.path.getsize(file) > 10000000:
-        soup = BeautifulSoup(fileData["content"], "lxml")  # creates the soup object to extract all the text
-        fullText = soup.get_text().lower() # gets all text from the document in one string
+    soup = BeautifulSoup(fileData["content"], "lxml")  # creates the soup object to extract all the text
+    fullText = soup.get_text().lower() # gets all text from the document in one string
 
-        soup2 = BeautifulSoup(fileData["url"], "lxml")  # creates the soup object to extract all the text
-        url = soup2.get_text() # gets all text from the document in one string
-    else:
-        soup = HTMLParser(fileData["content"])
-        fullText = soup.text().lower()
+    soup2 = BeautifulSoup(fileData["url"], "lxml")  # creates the soup object to extract all the text
+    url = soup2.get_text() # gets all text from the document in one string
 
-        soup2 = HTMLParser(fileData["url"])
-        url = soup2.text()
-
-    #tokenizes strings
+    #get standard tokens in a list
     tokens = re.findall(r"[a-zA-Z0-9]+", fullText)
 
+    #create a weight dictionary with the frequency as the starting weight
+    freqDict = nltk.FreqDist(tokens)
 
+    #TODO: account for broken html & adjust weight system
+    #titles
+    for tags in soup.find_all("title"):
+        tokens = re.findall(r"[a-zA-Z0-9]+", tags.text)
+        for token in tokens:
+            freqDict[token] += 20
+
+    #headers
+    heading_tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
+    for tags in soup.find_all(heading_tags):
+        tokens = re.findall(r"[a-zA-Z0-9]+", tags.text)
+
+        if tags.name == "h1":
+            for token in tokens:
+                freqDict[token] += 20
+        elif tags.name == "h2":
+            for token in tokens:
+                freqDict[token] += 15
+        elif tags.name == "h3":
+            for token in tokens:
+                freqDict[token] += 10
+        elif tags.name == "h4":
+            for token in tokens:
+                freqDict[token] += 8
+        elif tags.name == "h5":
+            for token in tokens:
+                freqDict[token] += 6
+        elif tags.name == "h6":
+            for token in tokens:
+                freqDict[token] += 5
+
+    #bolds
+    for tags in soup.find_all("b"):
+        tokens = re.findall(r"[a-zA-Z0-9]+", tags.text)
+        for token in tokens:
+            freqDict[token] += 5
+
+    #strongs
+    for tags in soup.find_all("strong"):
+        tokens = re.findall(r"[a-zA-Z0-9]+", tags.text)
+        for token in tokens:
+            freqDict[token] += 5
+
+
+
+    # update global dictionary with the doc ID key
     globalDocID[docID] = {'path': str(file), 
                           'url': url}
 
-    # create list of tokens
-    #filteredTokens = [word for word in tokenizer.split()]
+
+    tokens = [(key,weight) for key,weight in freqDict.items()]
     return tokens
 
 
