@@ -32,6 +32,7 @@ def createReport(docindCounter):
         fileSize += os.path.getsize(filePath)
 
         file.close()'''
+
     with open ("txtIndex.txt", "r") as ind:
         numTokens = sum(1 for line in ind)
         fileSize = os.path.getsize("txtIndex.txt")
@@ -60,7 +61,7 @@ def printIndex(index):
 	print(data[index]["path"])
 	print(data[index]["url"])
 	
-	f.close() 
+	f.close()
 
 
 if __name__== "__main__":
@@ -83,9 +84,8 @@ if __name__== "__main__":
                     docIDInd+=1
                     print(docIDInd)
                     tokens = openHtml(child2, docIDInd)
-                    parsedTokens = parseTokens(tokens)
                     #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
-                    createIndex(parsedTokens, docIDInd)
+                    createIndex(tokens, docIDInd)
 
     dumpGlobalIndexToFiles()
 
