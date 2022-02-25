@@ -6,7 +6,7 @@ import time
 def createReport(docindCounter):
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
     and the size of our JSON file and
-    put it in a txt file or pdf if you know how '''
+    put it in a txt file or pdf if you know how
 
     numTokens = 0
     fileSize = 0
@@ -31,14 +31,19 @@ def createReport(docindCounter):
         numTokens += len(data)
         fileSize += os.path.getsize(filePath)
 
-        file.close()
+        file.close()'''
+    with open ("txtIndex.txt", "r") as ind:
+        numTokens = sum(1 for line in ind)
+        fileSize = os.path.getsize("txtIndex.txt")
+        data = json.load("docIndex.json")
+        numDocs = len(data)
 
-    with open("report.txt", "r+") as file:
-        file.truncate(0)
-        file.write("Assignment 3 Milestone 1 Report \n")
-        file.write(f"Number of unique tokens: {numTokens}\n")
-        file.write(f"Number of documents {numDocs}\n")
-        file.write(f"Size of Index (bytes): {fileSize}\n")
+        with open("report.txt", "r+") as file:
+            file.truncate(0)
+            file.write("Assignment 3 Milestone 1 Report \n")
+            file.write(f"Number of unique tokens: {numTokens}\n")
+            file.write(f"Number of documents {numDocs}\n")
+            file.write(f"Size of Index (bytes): {fileSize}\n")
 
 
 
