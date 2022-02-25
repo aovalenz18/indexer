@@ -12,9 +12,19 @@ def createReport(docindCounter):
     fileSize = 0
     numDocs = docindCounter
 
-    for i in range(1,11):
-        filePath = "indexFiles/indexFile" + str(i) + ".json"
+    for i in range(0,10):
+        filePath = "indexFiles/" + str(i) + ".json"
     
+        file = open(filePath)
+
+        data = json.load(file)
+        numTokens += len(data)
+        fileSize += os.path.getsize(filePath)
+
+        file.close()
+    
+    for i in range(97, 123): #a-z
+        filePath = "indexFiles/" + chr(i) + ".json"
         file = open(filePath)
 
         data = json.load(file)
@@ -92,6 +102,7 @@ if __name__=="__main__":
     resetIndexFiles()
     "iterate through DEV directory and have each file go through the below"
     #Open the initial DEV directory
+    '''
     for child in Path('DEV').iterdir():
         #discard hidden files
         if not child.name.startswith('.'):
@@ -108,14 +119,14 @@ if __name__=="__main__":
 
 
     dumpGlobalIndexToFiles()
-    
+    '''
     '''
     with open('index.json', 'r+') as jsonFile:
         jsonFile.seek(0, io.SEEK_END)
         json.dump(globalIndex, jsonFile, indent=4)
     '''
     
-    createReport(docIDInd)
+    #createReport(docIDInd)
         
 
 
