@@ -3,6 +3,8 @@ import json
 import re
 from bs4 import BeautifulSoup
 from selectolax.parser import HTMLParser
+import lxml
+import cchardet
 import os
 
 # kazeem
@@ -14,7 +16,7 @@ def openHtml(file):
     newFile.close()
 
     if os.path.getsize(file) > 10000000:
-        soup = BeautifulSoup(fileData["content"], 'html.parser')  # creates the soup object to extract all the text
+        soup = BeautifulSoup(fileData["content"], "lxml")  # creates the soup object to extract all the text
         fullText = soup.get_text().lower() # gets all text from the document in one string
     else:
         soup = HTMLParser(fileData["content"])
