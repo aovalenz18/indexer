@@ -86,9 +86,10 @@ if __name__== "__main__":
                     tokens = openHtml(child2, docIDInd)
                     #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     createIndex(tokens, docIDInd)
-                    mergeAndMakeIndDict()
+                    
 
     dumpGlobalIndexToFiles()
+    mergeAndMakeIndDict()
 
     seconds2 = time.time()
     local_time2 = time.ctime(seconds2)
