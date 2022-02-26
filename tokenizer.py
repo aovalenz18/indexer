@@ -9,6 +9,7 @@ import cchardet
 import os
 from urllib.request import urlopen
 
+
 from indexer import globalDocID
 
 # kazeem
@@ -26,10 +27,12 @@ def openHtml(file, docID):
     fullText = soup.get_text().lower() # gets all text from the document in one string
 
     try:
-        soup2 = BeautifulSoup(urlopen(fileData["url"]), "lxml")  # creates the soup object to extract url
+        soup2 = BeautifulSoup(fileData["url"], "lxml")  # creates the soup object to extract url
         url = soup2.get_text() # gets all text from the document in one string
+        #print(url)
         url = url.split('#')
         url = url[0]
+        #print(url)
     except:
         url = "ERROR"
 

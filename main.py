@@ -2,6 +2,7 @@ from tokenizer import *
 from indexer import *
 from fileRelated import *
 import time
+import warnings
 
 def createReport(docindCounter):
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
@@ -74,6 +75,8 @@ if __name__== "__main__":
     
     seconds = time.time()
     local_time = time.ctime(seconds)
+
+    warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
     for child in Path("DEV").iterdir():
         #discard hidden files
