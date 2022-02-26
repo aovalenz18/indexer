@@ -1,4 +1,4 @@
 Assignment 3 Milestone 1 Report 
-Number of unique tokens: 1096689
+Number of unique tokens: 1093192
 Number of documents 55393
-Size of Index (bytes): 840465306
+Size of Index (bytes): 115324190

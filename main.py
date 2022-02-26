@@ -37,7 +37,8 @@ def createReport(docindCounter):
     with open ("txtIndex.txt", "r") as ind:
         numTokens = sum(1 for line in ind)
         fileSize = os.path.getsize("txtIndex.txt")
-        data = json.load("docIndex.json")
+        fileDoc = open("docIndex.json")
+        data = json.load(fileDoc)
         numDocs = len(data)
 
         with open("report.txt", "r+") as file:
@@ -66,7 +67,7 @@ def printIndex(index):
 
 
 if __name__== "__main__":
-    "NOTE: There are 55,393 files so WILL take a while"
+    
     docIDInd = 0
     allTokens = {}
     resetIndexFiles()
@@ -98,14 +99,12 @@ if __name__== "__main__":
     local_time2 = time.ctime(seconds2)
     print("start time:", local_time)
     print("end time:", local_time2)
-    
+
     '''
     with open('index.json', 'r+') as jsonFile:
         jsonFile.seek(0, io.SEEK_END)
         json.dump(globalIndex, jsonFile, indent=4)
     '''
-    
+
     createReport(docIDInd)
         
-
-
