@@ -1,5 +1,6 @@
 from interface import *
 from query import *
+import time
 
 
 '''Main part of query program, have terminal interface to access indexer
@@ -10,33 +11,36 @@ if __name__=="__main__":
     userInput = getUserInput()
 
     while userInput != "q":
-        # Add this part when the functions gets done
+        
+        # Start the search time
+        startTime = int(time.time() * 1000)
         
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict = search(userInput)
 
-        # Create a matrix result from the indexDict
-        matrix = createMatrix(indexDict)
+        if len(indexDict) == 0:
+            print("No results found with all words in a document.")
+            endTime = int(time.time() * 1000)
+        else:
+            # Create a matrix result from the indexDict
+            matrix = createMatrix(indexDict)
 
-        # Get the top 5 documents based on the matrix
-        documentList = matrixResults(matrix[0], matrix[1])
+            # Get the top 5 documents based on the matrix
+            documentList = matrixResults(matrix[0], matrix[1])
 
-        # Output the documentList
-        # printResult(documentList)
-        print(documentList)
+            endTime = int(time.time() * 1000)
+
+            # Output the documentList
+            print("\nResult:\n")
+            for i, list in zip(range(1, len(documentList)+1), documentList):
+                print(str(i)+ " : "+ list)
+
+            # For testing search
+            #indexDict = search(userInput)
+            #print(indexDict)
         
-        
-        
-
-        # Used to see what the parsed userInput look like
-        print(userInput)
-
-        # For testing search
-        #indexDict = search(userInput)
-        #print(indexDict)
+        print("\nTotal time to search: " + str(endTime-startTime) + "ms\n")
 
         userInput = getUserInput()
 
     print("\nClosing the program")
-
-    pass
