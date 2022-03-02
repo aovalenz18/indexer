@@ -15,7 +15,7 @@ def getUserInput():
     print("\nNotes/Rules:\n" + 
           "1) Words need to be separated by space\n" +
           "2) The search will be taken in consider for AND operation\n" + 
-          "3) Do not include any punctuation\n")
+          "3) Do not include any punctuation beside the aposterphe\n")
 
     validationPass = False
 
@@ -44,14 +44,10 @@ def validate(query: str):
     numOfWords1 = len(query.split())
 
     #tokenizes strings
-    inputTokens = re.findall(r"(?:^|(?<= ))[a-zA-Z0-9]+(?= |$)", query)
+    inputTokens = re.findall(r"(?:^|(?<= ))[a-zA-Z0-9']+(?= |$)", query)
 
     if(numOfWords1 != len(inputTokens)):
         print("\nError in the input, please enter in input correctly.\n")
         return []
     
     return parseTokens(inputTokens)
-
-
-def printResult(documentList):
-    pass
