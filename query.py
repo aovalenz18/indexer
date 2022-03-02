@@ -95,9 +95,12 @@ def matrixResults(matrix: [list], pageMapping: dict):
         sum = 0
         for j in len(matrix[0]):
             sum+=matrix[i][j]
-        tfidfSums.append((i, sum))
+        tfidfSums.append((pageMapping[i], sum))
     
-    finalList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
+    tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
+    finalList = []
+    for docs in tupleList:
+        finalList.append(docs[0])
     return finalList
 
     '''
