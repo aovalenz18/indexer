@@ -74,6 +74,9 @@ def createMatrix(tokenDict: dict):
             tfidf = values[1]
             matrix[i, pageMapping[docID]] = tfidf
         i += 1
+
+    pageMapping = {value: key for key, value in pageMapping.items()}
+
     return matrix, pageMapping
 
 
