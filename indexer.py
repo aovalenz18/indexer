@@ -4,6 +4,7 @@ import nltk
 import io
 import os
 from pathlib import Path
+import math
 
 
 # Holds on to current indexs
@@ -140,15 +141,18 @@ def mergeAndMakeIndDict():
     
     # load json into dict
     linenum = 0
-    for child in Path('indexFiles').iterdir():
+    for child in Path('test').iterdir():
         file = open(child)
         data = json.load(file)
         # parse dict lists into "word docFreq docid,weight/tf..."
         with open("txtIndex.txt", "a") as txtFile:
             for token, postList in data.items():
-                tokenStr = f"{token} {len(postList)} "
+                numDocsWithToken = len(postList)
+                tokenStr = f"{token} "
                 for post in postList:
-                    tokenStr += f"{post[0]},{post[1]} "
+                    print(post[1], (math.log(55393/numDocsWithToken)))
+                    tfidf = post[1] * (math.log(55393/numDocsWithToken))
+                    tokenStr += f"{post[0]},{tfidf} "
                 # write to single text file
                 txtFile.write(f"{tokenStr} \n")
                 linenum += 1
@@ -161,3 +165,6 @@ def mergeAndMakeIndDict():
         jsonFile.truncate(0)
         jsonFile.seek(0, io.SEEK_END)
         json.dump(lineNumDict, jsonFile, indent=4)
+
+if __name__ == "__main__":
+    mergeAndMakeIndDict()
