@@ -46,7 +46,7 @@ def dumpGlobalIndexToFiles():
                 "o":{}, "p":{}, "q":{}, "r":{}, "s":{}, "t":{}, "u":{}, 
                 "v":{}, "w":{}, "x":{}, "y":{}, "z":{}, 
                 "0":{}, "1":{}, "2":{}, "3":{}, "4":{}, 
-                "5":{}, "6":{}, "7":{}, "8":{}, "9":{}}
+                "5":{}, "6":{}, "7":{}, "8":{}, "9":{}, "'":{}}
 
     for token in globalIndex:
         #print(token[0])
@@ -57,7 +57,10 @@ def dumpGlobalIndexToFiles():
 
     #update file with the sud-dictionaries
     for dictChar in dictList:
-        updateFile(dictList[dictChar], str(dictChar)+".json")
+        if dictChar == "'":
+            updateFile(dictList[dictChar], "z.json")
+        else:
+            updateFile(dictList[dictChar], str(dictChar)+".json")
 
 
 
