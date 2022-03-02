@@ -90,6 +90,20 @@ def matrixResults(matrix: [list], pageMapping: dict):
     and navigate through dictionary to get the corresponding file path name
     '''
 
+    for i in len(matrix):
+        tfidfSums = []
+        sum = 0
+        for j in len(matrix[0]):
+            sum+=matrix[i][j]
+        tfidfSums.append((pageMapping[i], sum))
+    
+    tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
+    finalList = []
+    for docs in tupleList:
+        finalList.append(docs[0])
+    return finalList
+
+    '''
     listMostDesirable = []
     bestMatch = len(matrix)
     infLoop = 0
@@ -111,7 +125,7 @@ def matrixResults(matrix: [list], pageMapping: dict):
         fileData = json.load(file)
         finalTop5 = []
         for docInd in listMostDesirable:
-            finalTop5.append(fileData[docInd]['url'])
+            finalTop5.append(fileData[docInd]['url'])'''
         
         
     return finalTop5
