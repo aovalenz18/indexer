@@ -4,6 +4,7 @@ import nltk
 import io
 import os
 from pathlib import Path
+import math
 
 
 # Holds on to current indexes
@@ -45,7 +46,7 @@ def dumpGlobalIndexToFiles():
                 "o":{}, "p":{}, "q":{}, "r":{}, "s":{}, "t":{}, "u":{}, 
                 "v":{}, "w":{}, "x":{}, "y":{}, "z":{}, 
                 "0":{}, "1":{}, "2":{}, "3":{}, "4":{}, 
-                "5":{}, "6":{}, "7":{}, "8":{}, "9":{}}
+                "5":{}, "6":{}, "7":{}, "8":{}, "9":{}, "'":{}}
 
     for token in globalIndex:
         #print(token[0])
@@ -56,7 +57,10 @@ def dumpGlobalIndexToFiles():
 
     #update file with the sud-dictionaries
     for dictChar in dictList:
-        updateFile(dictList[dictChar], str(dictChar)+".json")
+        if dictChar == "'":
+            updateFile(dictList[dictChar], "z.json")
+        else:
+            updateFile(dictList[dictChar], str(dictChar)+".json")
 
 
 
@@ -140,15 +144,18 @@ def mergeAndMakeIndDict():
     
     # load json into dict
     linenum = 0
-    for child in Path('indexFiles').iterdir():
+    for child in Path('test').iterdir():
         file = open(child)
         data = json.load(file)
         # parse dict lists into "word docFreq docid,weight/tf..."
         with open("txtIndex.txt", "a") as txtFile:
             for token, postList in data.items():
-                tokenStr = f"{token} {len(postList)} "
+                numDocsWithToken = len(postList)
+                tokenStr = f"{token} "
                 for post in postList:
-                    tokenStr += f"{post[0]},{post[1]} "
+                    print(post[1], (math.log(55393/numDocsWithToken)))
+                    tfidf = post[1] * (math.log(55393/numDocsWithToken))
+                    tokenStr += f"{post[0]},{tfidf} "
                 # write to single text file
                 txtFile.write(f"{tokenStr} \n")
                 linenum += 1
