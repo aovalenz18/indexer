@@ -7,7 +7,7 @@ from pathlib import Path
 import math
 
 
-# Holds on to current indexs
+# Holds on to current indexes
 globalIndex = {}
 
 # Stores temporary document ID
