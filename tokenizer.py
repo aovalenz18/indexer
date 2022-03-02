@@ -37,7 +37,7 @@ def openHtml(file, docID):
         url = "ERROR"
 
     #get standard tokens in a list
-    tokens = parseTokens(re.findall(r"[a-zA-Z0-9]+", fullText))
+    tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", fullText))
 
 
     #create a weight dictionary with the frequency as the starting weight
@@ -46,14 +46,14 @@ def openHtml(file, docID):
     #TODO: account for broken html & adjust weight system also make sure parser is working correctly
     #titles
     for tags in soup.find_all("title"):
-        tokens = parseTokens(re.findall(r"[a-zA-Z0-9]+", tags.text))
+        tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
             freqDict[token] += 20
 
     #headers
     heading_tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
     for tags in soup.find_all(heading_tags):
-        tokens = parseTokens(re.findall(r"[a-zA-Z0-9]+", tags.text))
+        tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
 
         if tags.name == "h1":
             for token in tokens:
@@ -76,13 +76,13 @@ def openHtml(file, docID):
 
     #bolds
     for tags in soup.find_all("b"):
-        tokens = parseTokens(re.findall(r"[a-zA-Z0-9]+", tags.text))
+        tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
             freqDict[token] += 5
 
     #strongs
     for tags in soup.find_all("strong"):
-        tokens = parseTokens(re.findall(r"[a-zA-Z0-9]+", tags.text))
+        tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
             freqDict[token] += 5
 
@@ -91,7 +91,8 @@ def openHtml(file, docID):
                           'url': url}
 
 
-    tokens = [(key,weight) for key,weight in freqDict.items()]
+    totalTermsinDoc = len(freqDict)
+    tokens = [(key, (weight/totalTermsinDoc)) for key,weight in freqDict.items()]
     return tokens
 
 
