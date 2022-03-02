@@ -144,7 +144,7 @@ def mergeAndMakeIndDict():
     
     # load json into dict
     linenum = 0
-    for child in Path('test').iterdir():
+    for child in Path('indexFiles').iterdir():
         file = open(child)
         data = json.load(file)
         # parse dict lists into "word docFreq docid,weight/tf..."
@@ -153,7 +153,6 @@ def mergeAndMakeIndDict():
                 numDocsWithToken = len(postList)
                 tokenStr = f"{token} "
                 for post in postList:
-                    print(post[1], (math.log(55393/numDocsWithToken)))
                     tfidf = post[1] * (math.log(55393/numDocsWithToken))
                     tokenStr += f"{post[0]},{tfidf} "
                 # write to single text file
