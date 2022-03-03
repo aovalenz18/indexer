@@ -39,14 +39,18 @@ if __name__ == "__main__":
         
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict = search(userInput)
+        endTime3 = int(time.time() * 1000)
 
         if len(indexDict) == 0:
             print("No results found with all words in a document.")
             endTime = int(time.time() * 1000)
         else:
+            startTime1 = int(time.time() * 1000)
             # Create a matrix result from the indexDict
             matrix = createMatrix(indexDict)
+            endTime1 = int(time.time() * 1000)
 
+            startTime2 = int(time.time() * 1000)
             # Get the top 5 documents based on the matrix
             documentList = matrixResults(matrix[0], matrix[1])
 
@@ -59,6 +63,9 @@ if __name__ == "__main__":
             print(documentList)
 
         print("\nTotal time to search: " + str(endTime-startTime) + "ms\n")
+        print("\nTotal time to search function: " + str(endTime3-startTime) + "ms\n")
+        print("\nTotal time to createMatrix: " + str(endTime1-startTime1) + "ms\n")
+        print("\nTotal time to matrixResult: " + str(endTime-startTime2) + "ms\n")
 
         userInput = getUserInput()
 
