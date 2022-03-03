@@ -19,7 +19,7 @@ def openFiles():
     offset = 0
     for line in file:
         line_offset.append(offset)
-        offset += len(line)
+        offset += len(line) + 1
     file.seek(0)
 
     return data, file, line_offset
@@ -50,6 +50,9 @@ if __name__ == "__main__":
 
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict = search(userInput)
+
+        for g in indexDict:
+            print(g)
         endTime3 = int(time.time() * 1000)
 
         if len(indexDict) == 0:

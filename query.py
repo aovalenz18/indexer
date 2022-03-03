@@ -23,11 +23,12 @@ def search(tokens: list):
     resultDict = {}
     for token in tokens:
         try:
-            lineNum = line_offset[gIndex[token]]
+            lineNum = line_offset[gIndex[token] - 1]
             # move to that position in the file
 
             gFile.seek(lineNum)
             info = gFile.readline().split()
+            #print(info)
             token = info[0]
             postingList = info[1:]
             for i in range(len(postingList)):
