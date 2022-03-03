@@ -3,8 +3,7 @@ from query import *
 import json
 import time
 
-gIndex = {}
-gFile = None
+
 
 
 def openFiles():
@@ -20,6 +19,7 @@ def openFiles():
 
     return data, file
 
+gIndex, gFile = openFiles()
 
 def closeFile(file):
     file.close()
@@ -28,7 +28,7 @@ def closeFile(file):
 Get user input and call outside functions to get the query results'''
 if __name__ == "__main__":
 
-    gIndex, gFile = openFiles()
+    #gIndex, gFile = openFiles()
 
     print("Assignment #3 - Search Engine")
     userInput = getUserInput()
@@ -54,9 +54,9 @@ if __name__ == "__main__":
 
             # Output the documentList
             print("\nResult:\n")
-            for i, list in zip(range(1, len(documentList)+1), documentList):
-                print(str(i)+ " : "+ list)
-
+            #for i, list in zip(range(1, len(documentList)+1), documentList):
+            #    print(str(i)+ " : "+ str(list))
+            print(documentList)
 
         print("\nTotal time to search: " + str(endTime-startTime) + "ms\n")
 

@@ -24,6 +24,7 @@ def search(tokens: list):
     for token in tokens:
         try:
             lineNum = gIndex[token]
+            print(lineNum)
             # move to that position in the file
             gFile.seek(lineNum)
             info = gFile.readline().split()
@@ -90,10 +91,10 @@ def matrixResults(matrix: [list], pageMapping: dict):
     and navigate through dictionary to get the corresponding file path name
     '''
 
-    for i in len(matrix):
+    for i in range(len(matrix)):
         tfidfSums = []
         sum = 0
-        for j in len(matrix[0]):
+        for j in range(len(matrix[0])):
             sum+=matrix[i][j]
         tfidfSums.append((pageMapping[i], sum))
     
