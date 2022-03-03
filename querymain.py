@@ -12,7 +12,7 @@ def openFiles():
     :return: index dictionary and file index objects
     This function is going to open up the lineNums.json
     """
-    with open('data.json') as f:
+    with open('lineNums.json') as f:
         data = json.load(f)
     # this is going to contain the index of the tokens
 
