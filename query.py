@@ -1,7 +1,7 @@
 import json
 import numpy as np
 from pathlib import Path
-from querymain import gFile, gIndex,line_offset
+from querymain import gFile, gIndex,line_offset, fileData
 import time
 
 
@@ -90,17 +90,14 @@ def matrixResults(matrix: [list], pageMapping: dict):
     and navigate through dictionary to get the corresponding file path name
     '''
 
-    for i in range(len(matrix)):
-        tfidfSums = []
+    tfidfSums = []
+    for i in range(len(matrix[0])):
         sum = 0
-        for j in range(len(matrix[0])):
-            sum += matrix[i][j]
+        for j in range(len(matrix)):
+            sum+=matrix[j][i]
         tfidfSums.append((pageMapping[i], sum))
-    with open("docIndex.json", "r+") as file:
-        fileData = json.load(file)
-        tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
-        finalList = []
-        for docs in tupleList:
-            finalList.append(fileData[str(docs[0])]['url'])
-
-        return finalList
+    tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:10]
+    finalList = []
+    for docs in tupleList:
+        finalList.append(fileData[str(docs[0])]['url'])
+    return finalList

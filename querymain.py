@@ -27,6 +27,9 @@ def openFiles():
 
 gIndex, gFile, line_offset = openFiles()
 
+with open("docIndex.json", "r+") as file:
+    fileData = json.load(file)
+
 
 def closeFile(file):
     file.close()
