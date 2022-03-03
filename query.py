@@ -1,7 +1,8 @@
 import json
 import numpy as np
 from pathlib import Path
-from querymain import gFile, gIndex
+from querymain import gFile, gIndex,line_offset
+import time
 
 
 def search(tokens: list):
@@ -19,15 +20,15 @@ def search(tokens: list):
     # for token in tokens:
     #     resultDict[token] = fileData[token]
     # return resultDict
-
     resultDict = {}
     for token in tokens:
         try:
-            lineNum = gIndex[token]
-            print(lineNum)
+            lineNum = line_offset[gIndex[token]]
             # move to that position in the file
+
             gFile.seek(lineNum)
             info = gFile.readline().split()
+
             token = info[0]
             postingList = info[1:]
             for i in range(len(postingList)):
@@ -77,7 +78,6 @@ def createMatrix(tokenDict: dict):
         i += 1
 
     pageMapping = {value: key for key, value in pageMapping.items()}
-
     return matrix, pageMapping
 
 
@@ -95,38 +95,13 @@ def matrixResults(matrix: [list], pageMapping: dict):
         tfidfSums = []
         sum = 0
         for j in range(len(matrix[0])):
-            sum+=matrix[i][j]
+            sum += matrix[i][j]
         tfidfSums.append((pageMapping[i], sum))
-    
-    tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
-    finalList = []
-    for docs in tupleList:
-        finalList.append(docs[0])
-    return finalList
-
-    '''
-    listMostDesirable = []
-    bestMatch = len(matrix)
-    infLoop = 0
-    while len(listMostDesirable) < 5:
-        if infLoop == 8:
-            break
-        for i in range(len(matrix[0])):
-            if len(listMostDesirable) < 5:
-                incCount = 0
-                for token in matrix:
-                    if token[i] == 1:
-                        incCount += 1
-                if incCount == bestMatch:
-                    listMostDesirable.append(pageMapping[i])
-        bestMatch -= 1
-        infLoop += 1
 
     with open("docIndex.json", "r+") as file:
         fileData = json.load(file)
-        finalTop5 = []
-        for docInd in listMostDesirable:
-            finalTop5.append(fileData[docInd]['url'])'''
-        
-        
-    return finalTop5
+        tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
+        finalList = []
+        for docs in tupleList:
+            finalList.append(fileData[str(docs[0])]['url'])
+        return finalList

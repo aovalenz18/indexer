@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 from selectolax.parser import HTMLParser
 import lxml
-import cchardet
+# import cchardet
 import os
 #from urllib.request import urlopen
 
