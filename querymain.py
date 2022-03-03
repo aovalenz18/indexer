@@ -68,7 +68,6 @@ if __name__ == "__main__":
             print("\nResult:\n")
             for i, list in zip(range(1, len(documentList)+1), documentList):
                 print(str(i)+ " : "+ str(list))
-            
 
 
         print("\nTotal time to search: " + str(endTime-startTime) + "ms\n")

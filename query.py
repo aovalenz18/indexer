@@ -28,7 +28,6 @@ def search(tokens: list):
 
             gFile.seek(lineNum)
             info = gFile.readline().split()
-
             token = info[0]
             postingList = info[1:]
             for i in range(len(postingList)):
@@ -97,11 +96,11 @@ def matrixResults(matrix: [list], pageMapping: dict):
         for j in range(len(matrix[0])):
             sum += matrix[i][j]
         tfidfSums.append((pageMapping[i], sum))
-
     with open("docIndex.json", "r+") as file:
         fileData = json.load(file)
         tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:9]
         finalList = []
         for docs in tupleList:
             finalList.append(fileData[str(docs[0])]['url'])
+
         return finalList
