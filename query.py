@@ -102,5 +102,8 @@ def matrixResults(matrix: [list], pageMapping: dict):
     finalList = []
     for docs in tupleList:
         finalList.append(fileData[str(docs[0])]['url'])
+<<<<<<< HEAD
     print(tupleList)
+=======
+>>>>>>> b49402df46dd5f1fbcf36429274e78b64817e2d7
     return finalList

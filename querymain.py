@@ -66,21 +66,26 @@ if __name__ == "__main__":
             endTime1 = int(time.time() * 1000)
 
             startTime2 = int(time.time() * 1000)
-            # Get the top 5 documents based on the matrix
+
+            # Get the top 20 documents based on the matrix
             documentList = matrixResults(matrix[0], matrix[1])
+
+            seen = set()
+            seen_add = seen.add
+            documentList = [x for x in documentList if not (x in seen or seen_add(x))]
 
             endTime = int(time.time() * 1000)
 
             # Output the documentList
             print("\nResult:\n")
-            for i, list in zip(range(1, len(documentList)+1), documentList):
+            for i, list in zip(range(1, min(10,len(documentList)) + 1), documentList):
                 print(str(i)+ " : "+ str(list))
 
 
-        print("\nTotal time to search: " + str(endTime-startTime) + "ms\n")
-        print("\nTotal time to search function: " + str(endTime3-startTime) + "ms\n")
-        print("\nTotal time to createMatrix: " + str(endTime1-startTime1) + "ms\n")
-        print("\nTotal time to matrixResult: " + str(endTime-startTime2) + "ms\n")
+        print("\nTotal time to search: " + str(endTime-startTime) + "ms")
+        print("Total time to search function: " + str(endTime3-startTime) + "ms")
+        print("Total time to createMatrix: " + str(endTime1-startTime1) + "ms")
+        print("Total time to matrixResult: " + str(endTime-startTime2) + "ms\n")
 
         userInput = getUserInput()
 
