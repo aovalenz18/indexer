@@ -48,7 +48,7 @@ def openHtml(file, docID):
     for tags in soup.find_all("title"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
-            freqDict[token] += 20
+            freqDict[token] += 6
 
     #headers
     heading_tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
@@ -57,34 +57,34 @@ def openHtml(file, docID):
 
         if tags.name == "h1":
             for token in tokens:
-                freqDict[token] += 20
+                freqDict[token] += 6
         elif tags.name == "h2":
             for token in tokens:
-                freqDict[token] += 15
+                freqDict[token] += 5
         elif tags.name == "h3":
             for token in tokens:
-                freqDict[token] += 10
+                freqDict[token] += 4
         elif tags.name == "h4":
             for token in tokens:
-                freqDict[token] += 8
+                freqDict[token] += 3
         elif tags.name == "h5":
             for token in tokens:
-                freqDict[token] += 6
+                freqDict[token] += 2
         elif tags.name == "h6":
             for token in tokens:
-                freqDict[token] += 5
+                freqDict[token] += 2
 
     #bolds
     for tags in soup.find_all("b"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
-            freqDict[token] += 5
+            freqDict[token] += 2
 
     #strongs
     for tags in soup.find_all("strong"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
-            freqDict[token] += 5
+            freqDict[token] += 2
 
     # update global dictionary with the doc ID key
     globalDocID[docID] = {'path': str(file), 
@@ -92,7 +92,7 @@ def openHtml(file, docID):
 
 
     totalTermsinDoc = len(freqDict)
-    tokens = [(key, (weight/totalTermsinDoc)) for key,weight in freqDict.items()]
+    tokens = [(key, (weight)) for key,weight in freqDict.items()]
     return tokens
 
 

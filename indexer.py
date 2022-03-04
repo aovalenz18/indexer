@@ -153,7 +153,7 @@ def mergeAndMakeIndDict():
                 numDocsWithToken = len(postList)
                 tokenStr = f"{token} "
                 for post in postList:
-                    tfidf = post[1] * (math.log(55393/numDocsWithToken))
+                    tfidf = (1 + math.log(post[1])) * (math.log(55393/numDocsWithToken))
                     tokenStr += f"{post[0]},{tfidf} "
                 # write to single text file
                 txtFile.write(f"{tokenStr} \n")
