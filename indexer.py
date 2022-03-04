@@ -153,7 +153,7 @@ def mergeAndMakeIndDict():
                 numDocsWithToken = len(postList)
                 tokenStr = f"{token} "
                 for post in postList:
-                    tfidf = post[1] * (math.log(55393/numDocsWithToken))
+                    tfidf = (1.0 + math.log(post[1])) * (math.log(55393/numDocsWithToken))
                     tokenStr += f"{post[0]},{tfidf} "
                 # write to single text file
                 txtFile.write(f"{tokenStr} \n")
@@ -167,3 +167,7 @@ def mergeAndMakeIndDict():
         jsonFile.truncate(0)
         jsonFile.seek(0, io.SEEK_END)
         json.dump(lineNumDict, jsonFile, indent=4)
+
+
+#def mergeIndexJson():
+
