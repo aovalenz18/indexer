@@ -1,9 +1,7 @@
-import json
 import numpy as np
-from pathlib import Path
 from querymain import gFile, gIndex,line_offset, fileData
-import time
-from linecache import getline
+import nltk
+import pandas as pd
 
 
 def search(tokens: list):
@@ -12,16 +10,6 @@ def search(tokens: list):
     :param tokens: list of query tokens from user input
     :return: a smaller dictionary with the tokens that were searched for with original values
     """
-    # Editing to gather information from the text file
-
-    # indexFile = open("index.json")
-    # fileData = json.load(indexFile)
-    # resultDict = dict()
-    #
-    # for token in tokens:
-    #     resultDict[token] = fileData[token]
-    # return resultDict
-    resultDict = {}
     for token in tokens:
         try:
             lineNum = line_offset[gIndex[token] - 1]
@@ -30,7 +18,7 @@ def search(tokens: list):
             gFile.seek(lineNum)
             info = gFile.readline().split()
             #print(info)
-            token = info[0]
+            doc = info[0]
             postingList = info[1:]
             for i in range(len(postingList)):
                 value = postingList[i]
@@ -38,16 +26,16 @@ def search(tokens: list):
                 docID = int(values[0])
                 tfidf = float(values[1])
                 postingList[i] = (docID, tfidf)
-
-            resultDict[token] = postingList
+            key = (doc, token)
+            resultDict[key] = postingList
             # return to beginning of the file
             gFile.seek(0, 0)
         except KeyError as error:
             print(token, " could not be found.")
-    return resultDict
+    return resultDict, freqDict
 
 
-def createMatrix(tokenDict: dict):
+def createMatrix(docDict: dict, freqDict: dict):
     # Anthony
     """
     :param tokenDict: smaller dictionary with tokens user is searching for whose values is same as in the index
@@ -58,20 +46,22 @@ def createMatrix(tokenDict: dict):
     # find the number of total pages for all tokens and map them to an index
     pageMapping = {}
     indexCounter = 0
-    for key in tokenDict:
-        postingList = tokenDict[key]
+    for key in docDict:
+        postingList = docDict[key]
         for post in postingList:
             docID = post[0]
             if docID not in pageMapping:
                 pageMapping[docID] = indexCounter
                 indexCounter += 1
 
-    matrixShape = (len(tokenDict), len(pageMapping))
+    matrixShape = (len(docDict), len(pageMapping))
     matrix = np.zeros(matrixShape)
 
+    tokenMapping = {}
     i = 0  # counter for each token in the dictionary
-    for token in tokenDict:
-        postingList = tokenDict[token]
+    for token in docDict:
+        tokenMapping[token] = i
+        postingList = docDict[token]
         for values in postingList:
             docID = values[0]
             tfidf = values[1]
@@ -79,31 +69,47 @@ def createMatrix(tokenDict: dict):
         i += 1
 
     pageMapping = {value: key for key, value in pageMapping.items()}
-    return matrix, pageMapping
+
+    similarDocs = []
+    for i in range(matrix.shape[1]):
+        zeros = np.argwhere(matrix[:, i] > 0)
+        if len(zeros) == matrix.shape[0]:
+            similarDocs.append(i)
+
+    scores = {}
+    length = {}
+    for token in docDict:
+        word = token[1]
+        postingList = docDict[token]
+        # postingList = [(k, v) for k, v in postingList if k in similarDocs]
+        numDocumentsWithTerm = len(postingList)
+        weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
+        for doc in similarDocs:
+            # docID = doc[1]
+            tfidf = matrix[tokenMapping[token], doc]
+
+            docNum = pageMapping[doc]
+            if docNum in scores:
+                scores[docNum] += weight * tfidf
+            else:
+                scores[docNum] = weight * tfidf
+            if docNum in length:
+                length[docNum] += 1
+            else:
+                length[docNum] = 1
+
+    for doc in scores:
+        scores[doc] = scores[doc] / length[doc]
+
+    return scores
 
 
-def matrixResults(matrix: [list], pageMapping: dict):
-    # Shaun
-    '''
-    :param matrix: boolean matrix that holds all occurences of token in a webpage
-    :return: a list of top 5 documents where the words appear
 
-    Go through matrix and find combination of values where the specified tokens appear,
-    and navigate through dictionary to get the corresponding file path name
-    '''
-
-    tfidfSums = []
-    for i in range(len(matrix[0])):
-        sum = 0
-        for j in range(len(matrix)):
-            sum+=matrix[j][i]
-        tfidfSums.append((pageMapping[i], sum))
-    tupleList = sorted(tfidfSums, key=lambda x: (x[1]), reverse=True)[0:20]
-    finalList = []
-    for docs in tupleList:
-        finalList.append(fileData[str(docs[0])]['url'])
-<<<<<<< HEAD
-    print(tupleList)
-=======
->>>>>>> b49402df46dd5f1fbcf36429274e78b64817e2d7
-    return finalList
+def getTopK(scores: dict):
+    final = []
+    scores = [(key, value) for key, value in sorted(scores.items(), key=lambda a: a[1], reverse=True)]
+    for kv in scores[:20]:
+        doc = kv[0]
+        print(doc)
+        final.append(fileData[str(doc)]['url'])
+    return final
