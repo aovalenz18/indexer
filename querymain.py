@@ -49,7 +49,7 @@ if __name__ == "__main__":
         startTime = int(time.time() * 1000)
 
         # Get a smaller dictionary from the indexer from the result of the userInput
-        indexDict = search(userInput)
+        indexDict, freqDict = search(userInput)
 
         for g in indexDict:
             print(g)
@@ -62,13 +62,13 @@ if __name__ == "__main__":
         else:
             startTime1 = int(time.time() * 1000)
             # Create a matrix result from the indexDict
-            matrix = createMatrix(indexDict)
+            scores = createMatrix(indexDict, freqDict)
             endTime1 = int(time.time() * 1000)
 
             startTime2 = int(time.time() * 1000)
 
             # Get the top 20 documents based on the matrix
-            documentList = matrixResults(matrix[0], matrix[1])
+            documentList = getTopK(scores)
 
             seen = set()
             seen_add = seen.add
