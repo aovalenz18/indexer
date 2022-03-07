@@ -63,7 +63,7 @@ if __name__ == "__main__":
         else:
             startTime1 = int(time.time() * 1000)
             # Create a matrix result from the indexDict
-            scores = createMatrix(indexDict, freqDict)
+            scores = cosineSimilarity(indexDict, freqDict)
             endTime1 = int(time.time() * 1000)
 
             startTime2 = int(time.time() * 1000)
