@@ -52,8 +52,8 @@ if __name__ == "__main__":
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict, freqDict = search(userInput)
 
-        for g in indexDict:
-            print(g)
+        #for g in indexDict:
+        #   print(g)
         endTime3 = int(time.time() * 1000)
 
 
