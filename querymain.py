@@ -83,10 +83,10 @@ if __name__ == "__main__":
                 print(str(i)+ " : "+ str(list))
 
 
-        print("\nTotal time to search: " + str(endTime-startTime) + "ms")
-        print("Total time to search function: " + str(endTime3-startTime) + "ms")
-        print("Total time to createMatrix: " + str(endTime1-startTime1) + "ms")
-        print("Total time to matrixResult: " + str(endTime-startTime2) + "ms\n")
+            print("\nTotal time to search: " + str(endTime-startTime) + "ms")
+            print("Total time to search function: " + str(endTime3-startTime) + "ms")
+            print("Total time to createMatrix: " + str(endTime1-startTime1) + "ms")
+            print("Total time to matrixResult: " + str(endTime-startTime2) + "ms\n")
 
         userInput = getUserInput()
 

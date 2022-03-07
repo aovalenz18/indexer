@@ -44,6 +44,8 @@ def search(tokens: list):
             gFile.seek(0, 0)
         except KeyError as error:
             print(token, " could not be found.")
+            resultDict.clear()
+            return resultDict,freqDict
     return resultDict, freqDict
 
 
@@ -99,7 +101,6 @@ def createMatrix(docDict: dict, freqDict: dict):
         for doc in similarDocs:
             # docID = doc[1]
             tfidf = matrix[tokenMapping[token], doc]
-
             docNum = pageMapping[doc]
             if docNum in scores:
                 scores[docNum] += weight * tfidf
@@ -110,26 +111,25 @@ def createMatrix(docDict: dict, freqDict: dict):
             else:
                 length[docNum] = 1
 
-
-    scores = {}
-    length = {}
-    for token in docDict:
-        word = token[1]
-        postingList = docDict[token]
-        numDocumentsWithTerm = len(postingList)
-        weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
-        for i in range(len(postingList)):
-            docID = postingList[i][0]
-            tfidf = postingList[i][1]
-
-            if docID in scores:
-                scores[docID] += weight * tfidf
-            else:
-                scores[docID] = weight * tfidf
-            if docID in length:
-                length[docID] += 1
-            else:
-                length[docID] = 1
+    # scores = {}
+    # length = {}
+    # for token in docDict:
+    #     word = token[1]
+    #     postingList = docDict[token]
+    #     numDocumentsWithTerm = len(postingList)
+    #     weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
+    #     for i in range(len(postingList)):
+    #         docID = postingList[i][0]
+    #         tfidf = postingList[i][1]
+    #
+    #         if docID in scores:
+    #             scores[docID] += weight * tfidf
+    #         else:
+    #             scores[docID] = weight * tfidf
+    #         if docID in length:
+    #             length[docID] += 1
+    #         else:
+    #             length[docID] = 1
 
     for doc in scores:
         scores[doc] = scores[doc] / length[doc]
