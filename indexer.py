@@ -95,9 +95,10 @@ def updateFile(indexDict: dict, fileName):
     # open the file from indexFiles/"fileName"
     filePath = "indexFiles/" + fileName
     file = open(filePath, "r+")
-    
 
+    # Used to store the dictionary from the file, if there are any stored
     fileDict = {}
+    
     # check if size of file is 0
     # set the fileDict to empty or load in prefilled in dictionary from file
     if os.stat(filePath).st_size != 0:
@@ -106,21 +107,12 @@ def updateFile(indexDict: dict, fileName):
     # compare indexDict and loaded dictionay and update the loaded dictionary
     for token in indexDict:
         if token in fileDict:
-            # Delete later when not using old indexing
-            '''
-            # merge posting list from indexDict to fileDict's posting list
-            fileDict[token][0].update(indexDict[token][0])
-            
-            #update the doc frequency by adding 
-            fileDict[token][1] += indexDict[token][1]
-            '''
             # merge posting list from indexDict to fileDict's posting list
             fileDict[token] = fileDict[token] + indexDict[token]
         else:
             fileDict[token] = indexDict[token]
 
     # write to file
-    #file.seek(0)
     file.truncate(0)
     file.seek(0, io.SEEK_END)
     json.dump(fileDict, file, indent=4)
