@@ -7,33 +7,9 @@ import warnings
 def createReport(docindCounter):
     ''' return the length of html files, the length of the JSON file (number of unique tokens)
     and the size of our JSON file and
-    put it in a txt file or pdf if you know how
+    put it in a txt file or pdf if you know how'''
 
-    numTokens = 0
-    fileSize = 0
-    numDocs = docindCounter
-
-    for i in range(0,10):
-        filePath = "indexFiles/" + str(i) + ".json"
-    
-        file = open(filePath)
-
-        data = json.load(file)
-        numTokens += len(data)
-        fileSize += os.path.getsize(filePath)
-
-        file.close()
-    
-    for i in range(97, 123): #a-z
-        filePath = "indexFiles/" + chr(i) + ".json"
-        file = open(filePath)
-
-        data = json.load(file)
-        numTokens += len(data)
-        fileSize += os.path.getsize(filePath)
-
-        file.close()'''
-
+    # Opens the txtIndex and docIndex files and gets required information to make report
     with open ("txtIndex.txt", "r") as ind:
         numTokens = sum(1 for line in ind)
         fileSize = os.path.getsize("txtIndex.txt")
@@ -72,40 +48,41 @@ if __name__== "__main__":
     allTokens = {}
     resetIndexFiles()
     "iterate through DEV directory and have each file go through the below"
-    #Open the initial DEV directory
-    
+    # Open the initial DEV directory
+
+
+    # Tracks the total time of the index creation process
     seconds = time.time()
     local_time = time.ctime(seconds)
 
     warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
+
+    # Loops through the files to be indexed
     for child in Path("DEV").iterdir():
-        #discard hidden files
+        # discard hidden files
         if not child.name.startswith('.'):
-            #Open the subdirectories
+            # Open the subdirectories
             for child2 in Path(child).iterdir():
                 if not child2.name.startswith('.'):
                     docIDInd+=1
                     print(docIDInd)
+                    # add parsed tokens to allTokens dictionary to keep track of tokens and their weighted frequencies'
                     tokens = openHtml(child2, docIDInd)
-                    #add parsed tokens to allTokens dictionary to keep track of tokens and their frequencies'
                     createIndex(tokens, docIDInd)
                     
 
+    # Final dump of dictionaries in memory to jsons in indexFiles
     dumpGlobalIndexToFiles()
+
+    # Merges the indexFiles into a single txt file
     mergeAndMakeIndDict()
 
+    # Prints start and end time of the index creation
     seconds2 = time.time()
     local_time2 = time.ctime(seconds2)
     print("start time:", local_time)
     print("end time:", local_time2)
 
-    '''
-    with open('index.json', 'r+') as jsonFile:
-        jsonFile.seek(0, io.SEEK_END)
-        json.dump(globalIndex, jsonFile, indent=4)
-    '''
-
+    # Creates report of the size of index files
     createReport(docIDInd)
-
-        

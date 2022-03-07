@@ -3,14 +3,8 @@ from nltk.stem import PorterStemmer
 import json
 import re
 from bs4 import BeautifulSoup
-from selectolax.parser import HTMLParser
-import lxml
-# import cchardet
-import os
-#from urllib.request import urlopen
-
-
 from indexer import globalDocID
+
 
 # kazeem
 def openHtml(file, docID):
@@ -20,7 +14,7 @@ def openHtml(file, docID):
     # type of word, and at the end call parse tokens on all the words
 
     newFile = open(file)
-    fileData = json.load(newFile) #file data is now a dictionary
+    fileData = json.load(newFile) # file data is now a dictionary
     newFile.close()
 
     soup = BeautifulSoup(fileData["content"], "lxml")  # creates the soup object to extract all the text
@@ -29,28 +23,25 @@ def openHtml(file, docID):
     try:
         soup2 = BeautifulSoup(fileData["url"], "lxml")  # creates the soup object to extract url
         url = soup2.get_text() # gets all text from the document in one string
-        #print(url)
         url = url.split('#')
         url = url[0]
-        #print(url)
     except:
         url = "ERROR"
 
-    #get standard tokens in a list
+    # get standard tokens in a list
     tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", fullText))
 
 
-    #create a weight dictionary with the frequency as the starting weight
+    # create a weight dictionary with the frequency as the starting weight
     freqDict = nltk.FreqDist(tokens)
 
-    #TODO: account for broken html & adjust weight system also make sure parser is working correctly
-    #titles
+    # titles
     for tags in soup.find_all("title"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
             freqDict[token] += 6
 
-    #headers
+    # headers
     heading_tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
     for tags in soup.find_all(heading_tags):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
@@ -74,13 +65,13 @@ def openHtml(file, docID):
             for token in tokens:
                 freqDict[token] += 2
 
-    #bolds
+    # bolds
     for tags in soup.find_all("b"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
             freqDict[token] += 2
 
-    #strongs
+    # strongs
     for tags in soup.find_all("strong"):
         tokens = parseTokens(re.findall(r"[a-zA-Z0-9']+", tags.text))
         for token in tokens:
@@ -91,7 +82,6 @@ def openHtml(file, docID):
                           'url': url}
 
 
-    totalTermsinDoc = len(freqDict)
     tokens = [(key, (weight)) for key,weight in freqDict.items()]
     return tokens
 

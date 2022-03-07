@@ -12,9 +12,10 @@ def openFiles():
     """
     print("Loading in files from database - Please wait\n")
 
+    # Opens the txtIndex file for use and loads the dictionary for looking up
+    # line numbers into memory for faster searching
     with open('lineNums.json') as f:
         data = json.load(f)
-    # this is going to contain the index of the tokens
 
     file = open("txtIndex.txt", "r")
 
@@ -83,10 +84,10 @@ if __name__ == "__main__":
                 print(str(i)+ " : "+ str(list))
 
 
-        print("\nTotal time to search: " + str(endTime-startTime) + "ms")
-        print("Total time to search function: " + str(endTime3-startTime) + "ms")
-        print("Total time to createMatrix: " + str(endTime1-startTime1) + "ms")
-        print("Total time to matrixResult: " + str(endTime-startTime2) + "ms\n")
+            print("\nTotal time to search: " + str(endTime-startTime) + "ms")
+            print("Total time to search function: " + str(endTime3-startTime) + "ms")
+            print("Total time to createMatrix: " + str(endTime1-startTime1) + "ms")
+            print("Total time to matrixResult: " + str(endTime-startTime2) + "ms\n")
 
         userInput = getUserInput()
 

@@ -167,7 +167,3 @@ def mergeAndMakeIndDict():
         jsonFile.truncate(0)
         jsonFile.seek(0, io.SEEK_END)
         json.dump(lineNumDict, jsonFile, indent=4)
-
-
-#def mergeIndexJson():
-
