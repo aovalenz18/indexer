@@ -1,7 +1,5 @@
 import numpy as np
 from querymain import gFile, gIndex,line_offset, fileData
-import time
-from linecache import getline
 import nltk
 
 
@@ -113,8 +111,6 @@ def cosineSimilarity(docDict: dict, freqDict: dict):
         scores[doc] = scores[doc] / length[doc]
 
     return scores
-
-
 
 
 def getTopK(scores: list):
