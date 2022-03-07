@@ -1,7 +1,8 @@
 import numpy as np
 from querymain import gFile, gIndex,line_offset, fileData
+import time
+from linecache import getline
 import nltk
-import pandas as pd
 
 
 def search(tokens: list):
@@ -10,6 +11,17 @@ def search(tokens: list):
     :param tokens: list of query tokens from user input
     :return: a smaller dictionary with the tokens that were searched for with original values
     """
+    # Editing to gather information from the text file
+
+    # indexFile = open("index.json")
+    # fileData = json.load(indexFile)
+    # resultDict = dict()
+    #
+    # for token in tokens:
+    #     resultDict[token] = fileData[token]
+    # return resultDict
+    freqDict = nltk.FreqDist(tokens)
+    resultDict = {}
     for token in tokens:
         try:
             lineNum = line_offset[gIndex[token] - 1]
@@ -98,10 +110,32 @@ def createMatrix(docDict: dict, freqDict: dict):
             else:
                 length[docNum] = 1
 
+
+    scores = {}
+    length = {}
+    for token in docDict:
+        word = token[1]
+        postingList = docDict[token]
+        numDocumentsWithTerm = len(postingList)
+        weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
+        for i in range(len(postingList)):
+            docID = postingList[i][0]
+            tfidf = postingList[i][1]
+
+            if docID in scores:
+                scores[docID] += weight * tfidf
+            else:
+                scores[docID] = weight * tfidf
+            if docID in length:
+                length[docID] += 1
+            else:
+                length[docID] = 1
+
     for doc in scores:
         scores[doc] = scores[doc] / length[doc]
 
     return scores
+
 
 
 
@@ -110,6 +144,5 @@ def getTopK(scores: dict):
     scores = [(key, value) for key, value in sorted(scores.items(), key=lambda a: a[1], reverse=True)]
     for kv in scores[:20]:
         doc = kv[0]
-        print(doc)
         final.append(fileData[str(doc)]['url'])
     return final
