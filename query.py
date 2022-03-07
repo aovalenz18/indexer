@@ -6,30 +6,21 @@ import nltk
 
 
 def search(tokens: list):
-    # Kazeem
     """
     :param tokens: list of query tokens from user input
-    :return: a smaller dictionary with the tokens that were searched for with original values
+    :return: a smaller dictionary with the tokens that were searched for with original values and a frequency dictionary
+    of the query terms
     """
-    # Editing to gather information from the text file
-
-    # indexFile = open("index.json")
-    # fileData = json.load(indexFile)
-    # resultDict = dict()
-    #
-    # for token in tokens:
-    #     resultDict[token] = fileData[token]
-    # return resultDict
+    # create a frequency dict of tokens in the given query
     freqDict = nltk.FreqDist(tokens)
     resultDict = {}
     for token in tokens:
         try:
             lineNum = line_offset[gIndex[token] - 1]
             # move to that position in the file
-
             gFile.seek(lineNum)
             info = gFile.readline().split()
-            #print(info)
+            # gather posting list and add to a dictionary for later retrieval
             doc = info[0]
             postingList = info[1:]
             for i in range(len(postingList)):
@@ -43,12 +34,14 @@ def search(tokens: list):
             # return to beginning of the file
             gFile.seek(0, 0)
         except KeyError as error:
+            # this error means that this token could not be found in our overall index
             print(token, " could not be found.")
+            resultDict.clear()
+            return resultDict, freqDict
     return resultDict, freqDict
 
 
-def createMatrix(docDict: dict, freqDict: dict):
-    # Anthony
+def cosineSimilarity(docDict: dict, freqDict: dict):
     """
     :param tokenDict: smaller dictionary with tokens user is searching for whose values is same as in the index
     :return: boolean matrix of tokens and documents, will be a 2D array
@@ -66,11 +59,14 @@ def createMatrix(docDict: dict, freqDict: dict):
                 pageMapping[docID] = indexCounter
                 indexCounter += 1
 
+    # create a boolean matrix that shows which terms are in which document
     matrixShape = (len(docDict), len(pageMapping))
     matrix = np.zeros(matrixShape)
 
+    # maps which tokens belong in which row
     tokenMapping = {}
-    i = 0  # counter for each token in the dictionary
+    i = 0
+    # add the tfidf score for a document if that term is present
     for token in docDict:
         tokenMapping[token] = i
         postingList = docDict[token]
@@ -80,27 +76,29 @@ def createMatrix(docDict: dict, freqDict: dict):
             matrix[i, pageMapping[docID]] = tfidf
         i += 1
 
+    # reverse the list to get the document number given the index
     pageMapping = {value: key for key, value in pageMapping.items()}
 
+    # get all the documents that contain all of the terms in the query
     similarDocs = []
     for i in range(matrix.shape[1]):
         zeros = np.argwhere(matrix[:, i] > 0)
         if len(zeros) == matrix.shape[0]:
             similarDocs.append(i)
 
+    # computing the cosine similarity between each term in the query and the documents
     scores = {}
     length = {}
     for token in docDict:
         word = token[1]
         postingList = docDict[token]
-        # postingList = [(k, v) for k, v in postingList if k in similarDocs]
         numDocumentsWithTerm = len(postingList)
+        # creating a tfidf weight for each query term
         weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
         for doc in similarDocs:
-            # docID = doc[1]
             tfidf = matrix[tokenMapping[token], doc]
-
             docNum = pageMapping[doc]
+            # computing the cosine similarity between term and document
             if docNum in scores:
                 scores[docNum] += weight * tfidf
             else:
@@ -110,27 +108,7 @@ def createMatrix(docDict: dict, freqDict: dict):
             else:
                 length[docNum] = 1
 
-
-    scores = {}
-    length = {}
-    for token in docDict:
-        word = token[1]
-        postingList = docDict[token]
-        numDocumentsWithTerm = len(postingList)
-        weight = (1 + np.log(freqDict[word])) * (np.log(55393 / numDocumentsWithTerm))
-        for i in range(len(postingList)):
-            docID = postingList[i][0]
-            tfidf = postingList[i][1]
-
-            if docID in scores:
-                scores[docID] += weight * tfidf
-            else:
-                scores[docID] = weight * tfidf
-            if docID in length:
-                length[docID] += 1
-            else:
-                length[docID] = 1
-
+    # normalizing the scores
     for doc in scores:
         scores[doc] = scores[doc] / length[doc]
 
@@ -139,7 +117,11 @@ def createMatrix(docDict: dict, freqDict: dict):
 
 
 
-def getTopK(scores: dict):
+def getTopK(scores: list):
+    '''
+    :param scores: takes in a list of tuples that contain a score and the document number
+    :return: returns a final list of the top 20 highest scores
+    '''
     final = []
     scores = [(key, value) for key, value in sorted(scores.items(), key=lambda a: a[1], reverse=True)]
     for kv in scores[:20]:

@@ -53,8 +53,8 @@ if __name__ == "__main__":
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict, freqDict = search(userInput)
 
-        for g in indexDict:
-            print(g)
+        #for g in indexDict:
+        #   print(g)
         endTime3 = int(time.time() * 1000)
 
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         else:
             startTime1 = int(time.time() * 1000)
             # Create a matrix result from the indexDict
-            scores = createMatrix(indexDict, freqDict)
+            scores = cosineSimilarity(indexDict, freqDict)
             endTime1 = int(time.time() * 1000)
 
             startTime2 = int(time.time() * 1000)
