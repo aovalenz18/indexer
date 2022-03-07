@@ -4,11 +4,14 @@ import json
 import time
 
 
+
 def openFiles():
     """
     :return: index dictionary and file index objects
     This function is going to open up the lineNums.json
     """
+    print("Loading in files from database - Please wait\n")
+
     with open('lineNums.json') as f:
         data = json.load(f)
     # this is going to contain the index of the tokens
@@ -38,8 +41,6 @@ def closeFile(file):
 '''Main part of query program, have terminal interface to access indexer
 Get user input and call outside functions to get the query results'''
 if __name__ == "__main__":
-
-    # gIndex, gFile = openFiles()
 
     print("Assignment #3 - Search Engine")
     userInput = getUserInput()

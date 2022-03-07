@@ -129,10 +129,11 @@ def createMatrix(docDict: dict, freqDict: dict):
 #     for docs in tupleList:
 #         finalList.append(fileData[str(docs[0])]['url'])
 #     return finalList
+
 def getTopK(scores: dict):
     final = []
     scores = [(key, value) for key, value in sorted(scores.items(), key=lambda a: a[1], reverse=True)]
-    print(scores)
+    #print(scores)
     for kv in scores[:10]:
         doc = kv[0]
         final.append(fileData[str(doc)]['url'])
