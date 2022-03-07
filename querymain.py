@@ -53,10 +53,7 @@ if __name__ == "__main__":
         # Get a smaller dictionary from the indexer from the result of the userInput
         indexDict, freqDict = search(userInput)
 
-        #for g in indexDict:
-        #   print(g)
         endTime3 = int(time.time() * 1000)
-
 
         if len(indexDict) == 0:
             print("No results found with all words in a document.")
