@@ -1,0 +1,89 @@
+10 BAD QUERIES:
+
+1. Don’t - checking for how apostrophes are handled
+    Originally, we decided to split words with apostrophes but we ran into trouble with false positives 
+    such as the word “Don’t” being split into “Don” and “t”, which would match when a user looked up just “Don”.
+    We decided to just keep the word as a token with the apostrophe included. This way, if a user wants to search 
+    the word, it will just have to look it up in the index.
+
+2. Computer Science
+    Before implementing the tf-idf system, this query would get the first 10 documents parsed, instead of the best.
+    We implemented tf-idf and ranking and now get results with better relevance.
+
+3. Computer - testing how to weigh different tags
+    In our original weighting system, we were getting weird results because we made titles and headers 
+    worth much more than singular occurrences of a token.
+    We changed how our weighting system worked to be more frequency oriented, this gave us more relevant 
+    results with more mentions of the token searched for.
+
+4. tools for techies - testing and functionality
+    After implementing our tf-idf functionality, we forgot to check queries with the boolean and, 
+    resulting in results that didn’t have every token in the query.
+    We went back into our code and checked for whether indices in the matrix had 0s, 
+    and if so to discount that document from the matrix.
+
+5. Sushi near me     46ms
+    Does not take context into consideration. 
+    Documents with these terms are returned but no information about restaurants appears.
+
+6. Anthony’s pizza    6ms
+    Does not do a good job of taking possession into account, just looks at terms in the document.
+
+7. White shark    40 ms
+    Results are not relevant. We were expecting to see something about the animal, 
+    but instead just returned sites with those terms in the text. 
+
+8. Lebron and the NBA    476 ms
+    The stop words in this query cause the search time to be over 300 milliseconds. 
+    If we were to remove the stopwords, the search time cuts to 10 milliseconds, 
+    meaning that our search function does not handle stopwords efficiently.
+
+9. to be or not to be   642ms
+    9 out of 10 results did not have all of the query words included. 
+    Also because stopwords have long posting lists, the time is over the 300ms
+    Afterwards, fixed the AND query problem, but only the first result does not 
+    have all of the query words. The time is still longer than 300ms due to the size of posting.
+
+10. Compute    210ms
+    Documents that did not contain the word compute were returned. 
+    All instances of compute were a part of larger words such as computer.
+    We fixed this by making changes to our search function and making 
+    sure we are indexing our index file correctly.
+    
+ 
+10 GOOD QUERIES:
+
+1. Garçon - Check with non-english characters
+    Correctly catches error and asks for a correct input.
+
+2. Check with empty query
+    Correctly catches error and asks for a correct input.
+
+3. Study abroad 80 ms
+    Correctly finds pages with these terms and gives good responses that seem 
+    relevant to query.
+
+4. Professor Pattis 56ms
+    Returned sites that all had information about Professor Pattis.
+
+5. Shaun Gold  10ms
+    Correctly only finds a full name that wouldn’t normally be in this data set only 
+    in a large wordlist.
+
+6. 100 300ms
+    Retrieves a page full of lots of occurrences of the number 100.
+
+7. ICS31 2ms
+    Retrieves pages relating to the course ICS-31.
+
+8. compuer 1ms
+    Correctly catches that “computer” does not exist in the database. 
+    Returned error message that it does not exist.
+
+9. Cristina Lopes 9ms 
+    Finds the faculty profile page of faculty member in the second result, 
+    all other results are related to her as well.
+
+10. Gold Mine 2ms
+    Top result included both of the words side by side while the other 
+    results included the words split apart.
