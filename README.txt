@@ -28,7 +28,7 @@ the database is being loading in first.
 
 Once it has finished loading, it will then ask you to enter in a query.
 
-The search query will accept ONLY alphanumeric letters and aposterphes.
+The search query will accept ONLY alphanumeric letters and apostrophes.
 
 If it detects any other characters or error, the user will be prompted to reenter another query.
 
