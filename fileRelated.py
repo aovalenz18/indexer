@@ -22,14 +22,12 @@ def resetIndexFiles():
         
     for i in range(97, 123): #a-z
         filePath = "indexFiles/" + chr(i) + ".json"
-        file = open(filePath, "r+") 
-        #file.seek(0)
+        file = open(filePath, "r+")
         file.truncate(0)
         file.close()
 
     # Delete information in docIndex.json
-    file = open("docIndex.json", "r+") 
-    #file.seek(0)
+    file = open("docIndex.json", "r+")
     file.truncate(0)
     file.close()
 
